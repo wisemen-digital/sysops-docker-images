@@ -1,5 +1,13 @@
 FROM nginx:stable-alpine
 
-COPY ./nginx.conf /etc/nginx/conf.d/default.conf
+# Copy configuration files
+COPY ./config/nginx/ /etc/nginx/
+COPY ./scripts/docker-entrypoint.sh /
 
-CMD ["nginx", "-g", "daemon off;"]
+# Clean Up
+WORKDIR /usr/share/nginx/html
+RUN chown -R nobody:nobody /docker-entrypoint.sh
+
+# Start nginx by default
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["serve"]

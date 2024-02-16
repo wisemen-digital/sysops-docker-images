@@ -1,8 +1,10 @@
-# vue-base
+# Base Vue Docker
 
-# laravel-base
+🐳 Generic docker image for Vue Applications
 
-## build & push
+## Commands
 
-- `docker build . -t appwisebe/vue-base  --platform linux/x86-64`
-- `docker push appwisebe/vue-base`
+Docker will default to the `serve` command.
+
+- `serve`: starts all services, such as `nginx`.
+- fallback: execute the provided command.
