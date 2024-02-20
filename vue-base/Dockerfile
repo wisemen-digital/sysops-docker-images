@@ -17,15 +17,32 @@ RUN npm i @import-meta-env/cli && \
 
 FROM nginx:stable-alpine as final
 
-# # Copy configuration files
-COPY ./config/nginx/ /etc/nginx/
-COPY ./scripts/docker-entrypoint.sh /
+ARG UNSECURED
+
+# Install packages
+# hadolint ignore=DL3018
+RUN apk add --no-cache \
+    supervisor
+
+# Copy configuration files
+# - nginx
+COPY common/config/nginx/ /etc/nginx/
+COPY vue-base/config/nginx/http.d/ /etc/nginx/http.d/
+RUN rm -f /etc/nginx/conf.d/default.conf
+# - supervisor
+COPY common/config/supervisor/supervisord.conf /etc/supervisor/
+COPY common/config/supervisor/conf.d/nginx.conf /etc/supervisor/conf.d/
+# - init
+COPY vue-base/scripts/docker-entrypoint.sh /
 COPY --from=build /app/import-meta-env /usr/bin/import-meta-env
 
-# # Clean Up
-WORKDIR /usr/share/nginx/html
-RUN chown -R nobody:nobody /docker-entrypoint.sh
+# Variations
+RUN if [ "${UNSECURED}" = "true" ]; then rm /etc/nginx/site-mods-enabled.d/headers-extra-security.conf; fi
 
-# # Start nginx by default
+# Clean Up
+WORKDIR /usr/share/nginx/html
+EXPOSE 80
+
+# Start supervisord by default
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["serve"]

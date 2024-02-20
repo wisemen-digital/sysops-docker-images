@@ -1,6 +1,10 @@
 # Base Vue Docker
 
-🐳 Generic docker image for Vue Applications
+🐳 Generic docker image for Vue Applications.
+
+Available images:
+- `latest`: normal version.
+- `secured`: with extra security nginx options.
 
 ## Commands
 

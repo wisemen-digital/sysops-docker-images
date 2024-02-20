@@ -2,6 +2,10 @@
 
 set -euo pipefail
 
+
+## Bootstrap
+
+
 # Inject environment variables
 ENV_EXAMPLE_PATH=/etc/import-meta-env/example
 if [ -f $ENV_EXAMPLE_PATH ]; then
@@ -14,11 +18,13 @@ else
   echo 'No example env file found, skipping env import…'
 fi
 
+
 ## Commands ##
+
 
 # Helper to serve all services
 if [ "$1" = 'serve' ]; then
-  exec nginx -g 'daemon off;'
+  exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
 
 # Fallback: just execute given command
 else
