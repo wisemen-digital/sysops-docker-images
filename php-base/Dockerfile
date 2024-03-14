@@ -44,7 +44,8 @@ RUN apk add --no-cache \
 # - nginx
 COPY common/config/nginx/ /etc/nginx/
 COPY php-base/config/nginx/http.d/ /etc/nginx/http.d/
-RUN rm -f /etc/nginx/site-mods-enabled.d/headers-*.conf
+RUN rm -f /etc/nginx/site-mods-enabled.d/headers-*.conf \
+  && rm -f /etc/nginx/site-mods-enabled.d/cache-static-content.conf
 # - php
 COPY php-base/config/php/ /etc/php${PHP_VERSION}/
 # - supervisor
