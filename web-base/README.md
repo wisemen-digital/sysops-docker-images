@@ -1,10 +1,10 @@
-# Base Vue Docker
+# Base Web Docker
 
-🐳 Generic docker image for Vue Applications.
+🐳 Generic docker image for static web applications.
 
 Available images:
 - `latest`: normal version.
-- `secured`: with extra security nginx options.
+- `unsecured`: **without** extra security nginx options.
 
 ## Commands
 

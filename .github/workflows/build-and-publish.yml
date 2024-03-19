@@ -17,10 +17,10 @@ jobs:
       matrix:
         image:
           - postgis-test
-          - vue-base
+          - web-base
         version: [latest]
         include:
-          - image: vue-base
+          - image: web-base
             version: unsecured
             unsecured: true
           # We need multiple PHP versions

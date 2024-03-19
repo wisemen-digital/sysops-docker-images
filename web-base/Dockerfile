@@ -27,13 +27,13 @@ RUN apk add --no-cache \
 # Copy configuration files
 # - nginx
 COPY common/config/nginx/ /etc/nginx/
-COPY vue-base/config/nginx/http.d/ /etc/nginx/http.d/
+COPY web-base/config/nginx/http.d/ /etc/nginx/http.d/
 RUN rm -f /etc/nginx/conf.d/default.conf
 # - supervisor
 COPY common/config/supervisor/supervisord.conf /etc/supervisor/
 COPY common/config/supervisor/conf.d/nginx.conf /etc/supervisor/conf.d/
 # - init
-COPY vue-base/scripts/docker-entrypoint.sh /
+COPY web-base/scripts/docker-entrypoint.sh /
 COPY --from=build /app/import-meta-env /usr/bin/import-meta-env
 
 # Variations
