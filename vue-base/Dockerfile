@@ -40,7 +40,7 @@ COPY --from=build /app/import-meta-env /usr/bin/import-meta-env
 RUN if [ "${UNSECURED}" = "true" ]; then rm /etc/nginx/site-mods-enabled.d/headers-extra-security.conf; fi
 
 # Clean Up
-WORKDIR /usr/share/nginx/html
+WORKDIR /app/www
 EXPOSE 80
 
 # Start supervisord by default
