@@ -1,0 +1,30 @@
+---
+name: Delete old untagged versions
+
+on:  # yamllint disable-line rule:truthy
+  schedule:
+    - cron: "0 0 1,15 * *"  # Every 2 weeks
+  push:
+    branches:
+      - main
+    paths:
+      - .github/delete-old-untagged-versions.yml
+  workflow_dispatch:
+
+jobs:
+  delete-untagged-versions:
+    name: Delete untagged versions
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image:
+          - nuxt-base
+          - php-base
+          - postgis-test
+          - web-base
+    steps:
+      - uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ matrix.image }}
+          package-type: container
+          delete-only-untagged-versions: true
