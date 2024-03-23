@@ -1,0 +1,22 @@
+---
+name: Build & Publish Matomo
+
+on:  # yamllint disable-line rule:truthy
+  schedule:
+    - cron: "0 0 1,15 * *"  # Every 2 weeks
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/build-and-publish-matomo.yml
+      - .github/workflows/internal-build-and-publish.yml
+      - 'common/**'
+      - 'matomo/**'
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    uses: ./.github/workflows/internal-build-and-publish.yml
+    with:
+      image: matomo
+      version: latest
