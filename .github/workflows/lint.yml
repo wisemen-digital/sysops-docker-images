@@ -11,24 +11,8 @@ on:  # yamllint disable-line rule:truthy
       - main
 
 jobs:
-  yaml-lint:
-    name: Lint YAML
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Run yamllint
-        run: yamllint .
-
-  dockerfile-lint:
-    name: Lint Dockerfile
-    runs-on: ubuntu-latest
-    env:
-      HADOLINT_RECURSIVE: 'true'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Run hadolint
-        uses: hadolint/hadolint-action@v3.1.0
-        with:
-          recursive: true
+  lint:
+    name: Lint YAML & Dockerfile
+    uses: wisemen-digital/devops-github-actions/.github/workflows/lint-yaml-and-docker.yml@main
+    with:
+      docker-lint-recursive: true
