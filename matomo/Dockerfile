@@ -19,7 +19,7 @@ COPY matomo/scripts/ /
 
 # Clean Up
 WORKDIR /var/www/html
-EXPOSE 80
+EXPOSE 8080
 
 # Start supervisord by default
 ENTRYPOINT ["/docker-entrypoint.sh"]

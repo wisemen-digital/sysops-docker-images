@@ -14,16 +14,7 @@ Docker will default to the `serve` command.
 - `init`: initialize the project, such as executing migrations.
 - fallback: execute the provided command.
 
-# Initialization
-
-Using an init container (that invokes `init` command above), the container will be prepared for use. This entails:
-
-- Running through the Matomo onboarding wizard.
-- Installing some plugins.
-- Tweaking some base Matomo options.
-- Applying the environment variables to the Matomo config.
-
-# Configuration
+## Configuration
 
 This image can be configured using the following environment variables:
 
@@ -46,3 +37,16 @@ This image can be configured using the following environment variables:
 | MATOMO_DATABASE_NAME | Every run | Database name |
 | MATOMO_DATABASE_USER | Every run | Database user |
 | MATOMO_DATABASE_PASSWORD | Every run | Database password |
+
+## Info
+
+Serves content on port `8080`.
+
+# Initialization
+
+Using an init container (that invokes `init` command above), the container will be prepared for use. This entails:
+
+- Running through the Matomo onboarding wizard.
+- Installing some plugins.
+- Tweaking some base Matomo options.
+- Applying the environment variables to the Matomo config.
