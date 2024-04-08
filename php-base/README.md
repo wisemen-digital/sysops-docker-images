@@ -18,6 +18,10 @@ Docker will default to the `serve` command.
 - `artisan`: helper to execute artisan commands.
 - fallback: execute the provided command.
 
+## Info
+
+Serves content on port `8080`.
+
 ## Configuration
 
 You can configure the max. allowed uploads via these 2 variables:

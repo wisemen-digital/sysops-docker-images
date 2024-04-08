@@ -13,6 +13,10 @@ Docker will default to the `serve` command.
 - `serve`: starts all services, such as `nginx`.
 - fallback: execute the provided command.
 
+## Info
+
+Serves content on port `80`.
+
 # Environment Injection
 
 :exclamation: Note that, if available, it will execute the `import-meta-env` command. This relies on a few things:

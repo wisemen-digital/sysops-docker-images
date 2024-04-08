@@ -12,3 +12,7 @@ Docker will default to the `serve` command.
 
 - `serve`: starts all services, such as `nginx`.
 - fallback: execute the provided command.
+
+## Info
+
+Serves content on port `8080`.

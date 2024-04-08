@@ -26,7 +26,7 @@ WORKDIR /app/www
 RUN chown -R nobody:nobody /docker-entrypoint.sh /app/www /run /var/lib/nginx /var/log/nginx \
   && addgroup nobody tty
 USER nobody
-EXPOSE 80
+EXPOSE 8080
 
 # Start supervisord by default
 ENTRYPOINT ["/docker-entrypoint.sh"]
