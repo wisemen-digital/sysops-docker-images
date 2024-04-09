@@ -1,6 +1,8 @@
 ARG NODE_VERSION=lts
 FROM node:${NODE_VERSION}-alpine as final
 
+ARG UNSECURED
+
 # Install packages
 # hadolint ignore=DL3018
 RUN apk add --no-cache \
