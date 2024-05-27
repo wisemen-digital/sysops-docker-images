@@ -4,6 +4,7 @@ FROM alpine:${ALPINE_VERSION} as final
 # Command line arguments, such as PHP version
 ARG PHP_VERSION="83"
 ARG DEFAULT_TZ="Europe/Brussels"
+ARG OCTANE
 
 # Install packages
 # hadolint ignore=DL3018
@@ -40,20 +41,43 @@ RUN apk add --no-cache \
   && echo "${DEFAULT_TZ}" > /etc/timezone \
   && apk del tzdata
 
+
+# Install octane php extensions
+RUN if [ "${OCTANE}" = "true" ]; then apk add --no-cache \
+  php${PHP_VERSION}-pecl-swoole \
+  php${PHP_VERSION}-pcntl \
+  php${PHP_VERSION}-posix \
+; fi
+
 # Copy configuration files
 # - nginx
 COPY common/config/nginx/ /etc/nginx/
-COPY php-base/config/nginx/http.d/ /etc/nginx/http.d/
+COPY php-base/config/nginx/http.d/default.conf /etc/nginx/http.d/default.conf
 RUN rm -f /etc/nginx/site-mods-enabled.d/headers-*.conf \
   && rm -f /etc/nginx/site-mods-enabled.d/cache-static-content.conf
-# - php
+
+# octane nginx variation
+RUN if [ "${OCTANE}" = "true" ]; then apk add --no-cache \
+  COPY php-base/config/nginx/http.d/octane.conf /etc/nginx/http.d/default.conf \
+; fi
+
+  # - php
 COPY php-base/config/php/ /etc/php${PHP_VERSION}/
+
 # - supervisor
 COPY common/config/supervisor/supervisord.conf /etc/supervisor/
 COPY common/config/supervisor/conf.d/nginx.conf /etc/supervisor/conf.d/
-COPY php-base/config/supervisor/conf.d/ /etc/supervisor/conf.d/
+
+# octane supervisor variation
+RUN if [ "${OCTANE}" = "true" ]; then apk add --no-cache \
+  COPY php-base/config/supervisor/conf.d/php-fpm.conf /etc/supervisor/conf.d/php-fpm.conf \
+; else \
+  COPY php-base/config/supervisor/conf.d/octane.conf /etc/supervisor/conf.d/octane.conf \
+; fi
+
 # - init
 COPY php-base/scripts/docker-entrypoint.sh /
+
 
 # Clean Up
 WORKDIR /app/www
