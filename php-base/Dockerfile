@@ -52,13 +52,14 @@ RUN if [ "${OCTANE}" = "true" ]; then apk add --no-cache \
 # Copy configuration files
 # - nginx
 COPY common/config/nginx/ /etc/nginx/
-COPY php-base/config/nginx/http.d/default.conf /etc/nginx/http.d/default.conf
+COPY php-base/config/nginx/http.d/ /etc/nginx/http.d/
 RUN rm -f /etc/nginx/site-mods-enabled.d/headers-*.conf \
   && rm -f /etc/nginx/site-mods-enabled.d/cache-static-content.conf
 
 # octane nginx variation
-RUN if [ "${OCTANE}" = "true" ]; then apk add --no-cache \
-  COPY php-base/config/nginx/http.d/octane.conf /etc/nginx/http.d/default.conf \
+RUN if [ "${OCTANE}" = "true" ]; then \
+  rm /etc/nginx/http.d/default.conf && \  
+  mv /etc/nginx/http.d/octane.conf /etc/nginx/http.d/default.conf \
 ; fi
 
   # - php
@@ -67,12 +68,13 @@ COPY php-base/config/php/ /etc/php${PHP_VERSION}/
 # - supervisor
 COPY common/config/supervisor/supervisord.conf /etc/supervisor/
 COPY common/config/supervisor/conf.d/nginx.conf /etc/supervisor/conf.d/
+COPY php-base/config/supervisor/conf.d/ /etc/supervisor/conf.d/
 
 # octane supervisor variation
-RUN if [ "${OCTANE}" = "true" ]; then apk add --no-cache \
-  COPY php-base/config/supervisor/conf.d/php-fpm.conf /etc/supervisor/conf.d/php-fpm.conf \
+RUN if [ "${OCTANE}" = "true" ]; then \
+  rm /etc/supervisor/conf.d/php-fpm.conf \
 ; else \
-  COPY php-base/config/supervisor/conf.d/octane.conf /etc/supervisor/conf.d/octane.conf \
+  rm /etc/supervisor/conf.d/octane.conf \
 ; fi
 
 # - init
