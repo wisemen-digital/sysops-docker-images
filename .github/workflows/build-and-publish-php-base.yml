@@ -1,5 +1,5 @@
 ---
-name: Build & Publish Octane Base
+name: Build & Publish PHP Base
 
 on:  # yamllint disable-line rule:truthy
   schedule:
