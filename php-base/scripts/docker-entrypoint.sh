@@ -40,7 +40,7 @@ elif [ "$1" = 'queue' ]; then
 
 # Init script, for use in initContainers (for example)
 elif [ "$1" = 'init' ]; then 
-  exec php artisan migrate --isolated
+  exec php artisan migrate --isolated --no-interaction --force
 
 # Helper to run artisan commands
 elif [ "$1" = 'artisan' ]; then
