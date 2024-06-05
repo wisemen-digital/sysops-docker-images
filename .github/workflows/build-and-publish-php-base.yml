@@ -24,31 +24,31 @@ jobs:
           - version: '8.1'
             php: '81'
             alpine: 3.19
-            octane: false
+            target: fpm
           - version: '8.1-octane'
             php: '81'
             alpine: 3.19
-            octane: true
+            target: octane
           - version: '8.2'
             php: '82'
             alpine: 3.19
-            octane: false
+            target: fpm
           - version: '8.2-octane'
             php: '82'
             alpine: 3.19
-            octane: true
+            target: octane
           - version: '8.3'
             php: '83'
             alpine: 3.19
-            octane: false
+            target: fpm
           - version: '8.3-octane'
             php: '83'
             alpine: 3.19
-            octane: true
+            target: octane
     with:
       image: php-base
       version: ${{ matrix.info.version }}
+      target: ${{ matrix.info.target }}
       build-args: |
         ALPINE_VERSION=${{ matrix.info.alpine }}
         PHP_VERSION=${{ matrix.info.php }}
-        OCTANE=${{ matrix.info.octane }}
