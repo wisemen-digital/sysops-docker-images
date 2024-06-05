@@ -12,12 +12,10 @@ RUN npm i @import-meta-env/cli && \
       -o import-meta-env
 
 #
-# --- Stage 2: Run ---
+# --- Stage 2: Base ---
 #
 
-FROM nginx:stable-alpine as final
-
-ARG UNSECURED
+FROM nginx:stable-alpine as base
 
 # Install packages
 # hadolint ignore=DL3018
@@ -36,9 +34,6 @@ COPY common/config/supervisor/conf.d/nginx.conf /etc/supervisor/conf.d/
 COPY web-base/scripts/docker-entrypoint.sh /
 COPY --from=build /app/import-meta-env /usr/bin/import-meta-env
 
-# Variations
-RUN if [ "${UNSECURED}" = "true" ]; then rm /etc/nginx/site-mods-enabled.d/headers-extra-security.conf; fi
-
 # Clean Up
 WORKDIR /app/www
 EXPOSE 80
@@ -46,3 +41,17 @@ EXPOSE 80
 # Start supervisord by default
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["serve"]
+
+#
+# --- Variant: Unsecured ---
+#
+
+FROM base as unsecured
+
+RUN rm /etc/nginx/site-mods-enabled.d/headers-extra-security.conf
+
+#
+# --- Variant: Secure (default) ---
+#
+
+FROM base as secure

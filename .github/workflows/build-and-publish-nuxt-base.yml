@@ -22,13 +22,13 @@ jobs:
         info:
           - version: lts
             node: lts
-            unsecured: false
+            target: secure
           - version: lts-unsecured
             node: lts
-            unsecured: true
+            target: unsecured
     with:
       image: nuxt-base
       version: ${{ matrix.info.version }}
+      target: ${{ matrix.info.target }}
       build-args: |
         NODE_VERSION=${{ matrix.info.node }}
-        UNSECURED=${{ matrix.info.unsecured }}

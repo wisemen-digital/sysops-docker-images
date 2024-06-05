@@ -21,11 +21,10 @@ jobs:
       matrix:
         info:
           - version: latest
-            unsecured: false
+            target: secure
           - version: latest-unsecured
-            unsecured: true
+            target: unsecured
     with:
       image: web-base
       version: ${{ matrix.info.version }}
-      build-args: |
-        UNSECURED=${{ matrix.info.unsecured }}
+      target: ${{ matrix.info.target }}
