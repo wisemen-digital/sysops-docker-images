@@ -1,7 +1,9 @@
-ARG NODE_VERSION=lts
-FROM node:${NODE_VERSION}-alpine as final
+#
+# --- Stage 1: Base ---
+#
 
-ARG UNSECURED
+ARG NODE_VERSION=lts
+FROM node:${NODE_VERSION}-alpine as base
 
 # Install packages
 # hadolint ignore=DL3018
@@ -20,16 +22,30 @@ COPY nuxt-base/config/supervisor/conf.d/ /etc/supervisor/conf.d/
 # - init
 COPY nuxt-base/scripts/docker-entrypoint.sh /
 
-# Variations
-RUN if [ "${UNSECURED}" = "true" ]; then rm /etc/nginx/site-mods-enabled.d/headers-extra-security.conf; fi
-
 # Clean Up
 WORKDIR /app/www
 RUN chown -R nobody:nobody /docker-entrypoint.sh /app/www /run /var/lib/nginx /var/log/nginx \
   && addgroup nobody tty
-USER nobody
 EXPOSE 8080
 
 # Start supervisord by default
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["serve"]
+
+#
+# --- Variant: Unsecured ---
+#
+
+FROM base as unsecured
+
+RUN rm /etc/nginx/site-mods-enabled.d/headers-extra-security.conf
+
+USER nobody
+
+#
+# --- Variant: Secure (default) ---
+#
+
+FROM base as secure
+
+USER nobody

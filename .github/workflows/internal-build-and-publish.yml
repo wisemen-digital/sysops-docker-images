@@ -16,6 +16,11 @@ on:  # yamllint disable-line rule:truthy
         description: Tag of the image to publish
         type: string
         required: true
+      target:
+        description: Dockerfile target to build
+        type: string
+        required: false
+        default: final
       build-args:
         description: Build arguments to pass along to Docker
         type: string
@@ -46,6 +51,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ghcr.io/${{ github.repository_owner }}/${{ inputs.image }}:${{ inputs.version }}
+          target: ${{ inputs.target }}
           build-args: ${{ inputs.build-args }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

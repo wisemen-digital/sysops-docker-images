@@ -1,5 +1,5 @@
 # hadolint ignore=DL3007
-FROM postgis/postgis:latest
+FROM postgis/postgis:latest AS final
 
 # Copy configuration files
 COPY postgis-test/config/postgresql/postgresql.conf /etc/postgresql.conf
