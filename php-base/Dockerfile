@@ -79,7 +79,7 @@ RUN apk add --no-cache \
     php${PHP_VERSION}-posix
 
 # Copy configuration files
-COPY php-base/config/nginx/http.d/default-octane.conf /etc/nginx/http.d/
+COPY php-base/config/nginx/http.d/default-octane.conf /etc/nginx/http.d/default.conf
 COPY php-base/config/supervisor/conf.d/php-octane.conf /etc/supervisor/conf.d/
 
 USER nobody
@@ -98,7 +98,7 @@ RUN apk add --no-cache \
   && ln -sf /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm
 
 # Copy configuration files
-COPY php-base/config/nginx/http.d/default-fpm.conf /etc/nginx/http.d/
+COPY php-base/config/nginx/http.d/default-fpm.conf /etc/nginx/http.d/default.conf
 COPY php-base/config/supervisor/conf.d/php-fpm.conf /etc/supervisor/conf.d/
 
 USER nobody
