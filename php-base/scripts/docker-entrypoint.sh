@@ -8,9 +8,9 @@ set -euo pipefail
 
 # Apply max post envs
 echo "client_max_body_size ${SERVER_POST_MAX_SIZE:-8M};" > /etc/nginx/site-mods-available.d/max-upload.conf
-for php_version in /etc/php*; do
-  echo "php_admin_value[post_max_size] = ${SERVER_POST_MAX_SIZE:-8M}" >> $php_version/php-fpm.d/www.conf
-  echo "php_admin_value[upload_max_filesize] = ${SERVER_POST_MAX_FILESIZE:-2M}" >> $php_version/php-fpm.d/www.conf
+for php_config_file in /etc/php*/php-fpm.d/www.conf; do
+  echo "php_admin_value[post_max_size] = ${SERVER_POST_MAX_SIZE:-8M}" >> "$php_config_file"
+  echo "php_admin_value[upload_max_filesize] = ${SERVER_POST_MAX_FILESIZE:-2M}" >> "$php_config_file"
 done
 
 # Cache laravel config
