@@ -34,6 +34,7 @@ RUN apk add --no-cache \
     php${PHP_VERSION}-xml \
     php${PHP_VERSION}-xmlwriter \
     php${PHP_VERSION}-zip \
+    php${PHP_VERSION}-gd \
     supervisor \
     tzdata \
   && ln -sf /usr/bin/php${PHP_VERSION} /usr/bin/php \
