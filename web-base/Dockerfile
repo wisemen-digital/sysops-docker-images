@@ -2,7 +2,7 @@
 # --- Stage 1: Build ---
 #
 
-FROM node:lts as build
+FROM node:lts AS build
 
 # Build import env tool
 WORKDIR /app
@@ -15,7 +15,7 @@ RUN npm i @import-meta-env/cli && \
 # --- Stage 2: Base ---
 #
 
-FROM nginx:stable-alpine as base
+FROM nginx:stable-alpine AS base
 
 # Install packages
 # hadolint ignore=DL3018
@@ -46,7 +46,7 @@ CMD ["serve"]
 # --- Variant: Unsecured ---
 #
 
-FROM base as unsecured
+FROM base AS unsecured
 
 RUN rm /etc/nginx/site-mods-enabled.d/headers-extra-security.conf
 
@@ -54,4 +54,4 @@ RUN rm /etc/nginx/site-mods-enabled.d/headers-extra-security.conf
 # --- Variant: Secure (default) ---
 #
 
-FROM base as secure
+FROM base AS secure

@@ -1,4 +1,4 @@
-FROM matomo:fpm-alpine as final
+FROM matomo:fpm-alpine AS final
 
 # Install packages
 # hadolint ignore=DL3018

@@ -3,7 +3,7 @@
 #
 
 ARG NODE_VERSION=lts
-FROM node:${NODE_VERSION}-alpine as base
+FROM node:${NODE_VERSION}-alpine AS base
 
 # Install packages
 # hadolint ignore=DL3018
@@ -36,7 +36,7 @@ CMD ["serve"]
 # --- Variant: Unsecured ---
 #
 
-FROM base as unsecured
+FROM base AS unsecured
 
 RUN rm /etc/nginx/site-mods-enabled.d/headers-extra-security.conf
 
@@ -46,6 +46,6 @@ USER nobody
 # --- Variant: Secure (default) ---
 #
 
-FROM base as secure
+FROM base AS secure
 
 USER nobody

@@ -3,7 +3,7 @@
 #
 
 ARG ALPINE_VERSION="3.19"
-FROM alpine:${ALPINE_VERSION} as base
+FROM alpine:${ALPINE_VERSION} AS base
 # Note: version repeated below
 ARG PHP_VERSION="83"  
 ARG DEFAULT_TZ="Europe/Brussels"
