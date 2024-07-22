@@ -1,0 +1,21 @@
+---
+name: Build & Publish Test NATS
+
+on:  # yamllint disable-line rule:truthy
+  schedule:
+    - cron: "0 0 1,15 * *"  # Every 2 weeks
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/build-and-publish-test-nats.yml
+      - .github/workflows/internal-build-and-publish.yml
+      - 'test-nats/**'
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    uses: ./.github/workflows/internal-build-and-publish.yml
+    with:
+      image: test-nats
+      version: latest

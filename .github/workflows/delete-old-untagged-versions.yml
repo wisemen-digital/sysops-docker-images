@@ -22,6 +22,7 @@ jobs:
           - nuxt-base
           - php-base
           - web-base
+          - test-nats
           - test-postgis
     steps:
       - uses: actions/delete-package-versions@v5
