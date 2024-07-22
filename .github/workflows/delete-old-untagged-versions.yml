@@ -18,10 +18,11 @@ jobs:
     strategy:
       matrix:
         image:
+          - matomo
           - nuxt-base
           - php-base
-          - postgis-test
           - web-base
+          - test-postgis
     steps:
       - uses: actions/delete-package-versions@v5
         with:

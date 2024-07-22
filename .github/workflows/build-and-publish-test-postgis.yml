@@ -1,5 +1,5 @@
 ---
-name: Build & Publish Postgis Test
+name: Build & Publish Test Postgis
 
 on:  # yamllint disable-line rule:truthy
   schedule:
@@ -8,15 +8,14 @@ on:  # yamllint disable-line rule:truthy
     branches:
       - main
     paths:
-      - .github/workflows/build-and-publish-postgis-test.yml
+      - .github/workflows/build-and-publish-test-postgis.yml
       - .github/workflows/internal-build-and-publish.yml
-      - 'common/**'
-      - 'postgis-test/**'
+      - 'test-postgis/**'
   workflow_dispatch:
 
 jobs:
   build-and-publish:
     uses: ./.github/workflows/internal-build-and-publish.yml
     with:
-      image: postgis-test
+      image: test-postgis
       version: latest
