@@ -32,6 +32,7 @@ RUN apk add --no-cache \
     php${PHP_VERSION}-tokenizer \
     php${PHP_VERSION}-tokenizer \
     php${PHP_VERSION}-xml \
+    php${PHP_VERSION}-xmlreader \
     php${PHP_VERSION}-xmlwriter \
     php${PHP_VERSION}-zip \
     php${PHP_VERSION}-gd \
