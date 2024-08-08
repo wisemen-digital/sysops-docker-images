@@ -1,0 +1,31 @@
+---
+name: Build & Publish Node Base
+
+on:  # yamllint disable-line rule:truthy
+  schedule:
+    - cron: "0 0 1,15 * *"  # Every 2 weeks
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/build-and-publish-node-base.yml
+      - .github/workflows/internal-build-and-publish.yml
+      - 'common/**'
+      - 'node-base/**'
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    uses: ./.github/workflows/internal-build-and-publish.yml
+    strategy:
+      matrix:
+        info:
+          - version: lts
+            node: lts
+            target: final
+    with:
+      image: node-base
+      version: ${{ matrix.info.version }}
+      target: ${{ matrix.info.target }}
+      build-args: |
+        NODE_VERSION=${{ matrix.info.node }}
