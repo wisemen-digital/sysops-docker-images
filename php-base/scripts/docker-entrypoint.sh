@@ -29,14 +29,13 @@ if [ "$1" = 'serve' ]; then
 # Helper to run cron jobs
 elif [ "$1" = 'scheduler' ]; then 
   while [ true ]; do
-    php artisan schedule:run --verbose --no-interaction &
-    sleep 60
+    php artisan schedule:work --verbose --no-interaction
   done
 
 # Helper to run queue jobs
 elif [ "$1" = 'queue' ]; then 
   shift 1;
-  exec php artisan queue:work --verbose --tries=3 --timeout=60 --rest=0.5 --sleep=3 --max-jobs=1000 --max-time=3600  "$@"
+  exec php artisan queue:work --verbose --tries=3 --timeout=60 --max-jobs=1000 --max-time=3600  "$@"
 
 # Init script, for use in initContainers (for example)
 elif [ "$1" = 'init' ]; then 
