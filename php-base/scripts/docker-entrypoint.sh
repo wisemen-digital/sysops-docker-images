@@ -28,10 +28,7 @@ if [ "$1" = 'serve' ]; then
 
 # Helper to run cron jobs
 elif [ "$1" = 'scheduler' ]; then 
-  while [ true ]; do
-    php artisan schedule:run --verbose --no-interaction &
-    sleep 60
-  done
+  php artisan schedule:work --verbose --no-interaction
 
 # Helper to run queue jobs
 elif [ "$1" = 'queue' ]; then 
