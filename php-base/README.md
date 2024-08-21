@@ -14,6 +14,7 @@ Docker will default to the `serve` command.
 - `serve`: starts all services, such as `nginx` and `php-fpm`.
 - `scheduler`: process scheduled tasks (cron jobs).
 - `queue`: process queued jobs. You can provide a specific queue with `--queue=my_queue`.
+- `websockets`: provide pusher websockets service.
 - `init`: initialize the project, such as executing migrations.
 - `artisan`: helper to execute artisan commands.
 - fallback: execute the provided command.

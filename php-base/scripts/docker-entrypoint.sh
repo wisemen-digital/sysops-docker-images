@@ -38,6 +38,11 @@ elif [ "$1" = 'queue' ]; then
   shift 1;
   exec php artisan queue:work --verbose --tries=3 --timeout=60 --rest=0.5 --sleep=3 --max-jobs=1000 --max-time=3600  "$@"
 
+# Helper to run websockets
+elif [ "$1" = 'websockets' ]; then 
+  shift 1;
+  exec php artisan websockets:serve
+
 # Init script, for use in initContainers (for example)
 elif [ "$1" = 'init' ]; then 
   exec php artisan migrate --isolated --no-interaction --force
