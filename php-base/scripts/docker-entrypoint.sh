@@ -36,7 +36,7 @@ elif [ "$1" = 'scheduler' ]; then
 # Helper to run queue jobs
 elif [ "$1" = 'queue' ]; then 
   shift 1;
-  exec php artisan queue:work --verbose --tries=3 --timeout=60 --rest=0.5 --sleep=3 --max-jobs=1000 --max-time=3600  "$@"
+  exec php artisan queue:work --verbose --tries=3 --timeout=60 --max-jobs=1000 --max-time=3600  "$@"
 
 # Helper to run websockets
 elif [ "$1" = 'websockets' ]; then 
