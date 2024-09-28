@@ -9,7 +9,7 @@ start_server() {
 
   # Start services
   /entrypoint.sh php-fpm &
-  nginx
+  nginx &
   sleep 2
 }
 
@@ -155,6 +155,9 @@ matomo_update_config() {
     "mail.password=\"$MATOMO_SMTP_PASSWORD\"" \
     "mail.encryption=\"$MATOMO_SMTP_ENCRYPTION\""
 }
+
+# Just in case, correct permissions
+chown -R www-data:www-data .
 
 # Only initialize if we do NOT have a config file
 if [ ! -f "$config_file" ]; then

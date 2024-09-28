@@ -17,6 +17,9 @@ COPY matomo/config/supervisor/conf.d/ /etc/supervisor/conf.d/
 # - init
 COPY matomo/scripts/ /
 
+# Configure cron
+RUN echo "*/30 * * * * /usr/local/bin/php /var/www/html/console core:archive --verbose --no-interaction" > /etc/crontabs/www-data
+
 # Clean Up
 WORKDIR /var/www/html
 EXPOSE 8080
