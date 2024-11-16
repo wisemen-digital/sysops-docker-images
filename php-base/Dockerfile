@@ -98,6 +98,7 @@ ARG PHP_VERSION="83"
 # hadolint ignore=DL3018
 RUN apk add --no-cache \
     php${PHP_VERSION}-fpm \
+    php${PHP_VERSION}-pcntl \
   && ln -sf /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm
 
 # Copy configuration files
