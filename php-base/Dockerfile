@@ -99,7 +99,6 @@ ARG PHP_VERSION="83"
 RUN apk add --no-cache \
     php${PHP_VERSION}-fpm \
     php${PHP_VERSION}-pcntl \
-    php${PHP_VERSION}-pecl-uv \
   && ln -sf /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm
 
 # Copy configuration files
