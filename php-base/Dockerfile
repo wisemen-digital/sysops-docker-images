@@ -99,9 +99,8 @@ ARG PHP_VERSION="83"
 RUN apk add --no-cache \
     php${PHP_VERSION}-fpm \
     php${PHP_VERSION}-pcntl \
-    php${PHP_VERSION}-pecl-swoole \
-  && ln -sf /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm \
-  && pecl install uv
+    php${PHP_VERSION}-pecl-uv \
+  && ln -sf /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm
 
 # Copy configuration files
 COPY php-base/config/nginx/http.d/default-fpm.conf /etc/nginx/http.d/default.conf
