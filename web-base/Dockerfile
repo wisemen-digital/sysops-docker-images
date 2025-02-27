@@ -31,7 +31,7 @@ RUN rm -f /etc/nginx/conf.d/default.conf
 COPY common/config/supervisor/supervisord.conf /etc/supervisor/
 COPY common/config/supervisor/conf.d/nginx.conf /etc/supervisor/conf.d/
 # - init
-COPY web-base/scripts/docker-entrypoint.sh /
+COPY web-base/scripts/ /scripts/
 COPY --from=build /app/import-meta-env /usr/bin/import-meta-env
 
 # Clean Up
@@ -39,7 +39,7 @@ WORKDIR /app/www
 EXPOSE 80
 
 # Start supervisord by default
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/scripts/docker-entrypoint.sh"]
 CMD ["serve"]
 
 #
