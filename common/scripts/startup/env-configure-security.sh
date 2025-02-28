@@ -14,6 +14,7 @@ set -euo pipefail
 # - NGINX_CSP_IMG_SRC: defaults to 'https:'
 # - NGINX_CSP_MANIFEST_SRC: defaults to ''
 # - NGINX_CSP_MEDIA_SRC: defaults to 'https:'
+# - NGINX_CSP_MODE: defaults to 'enforce'
 # - NGINX_CSP_OBJECT_SRC: defaults to ''
 # - NGINX_CSP_REPORT_URI: defaults to ''
 # - NGINX_CSP_SCRIPT_SRC: defaults to ''
@@ -31,12 +32,23 @@ NGINX_CSP_FRAME_SRC="${NGINX_CSP_FRAME_SRC:-https://youtube.com https://www.yout
 NGINX_CSP_IMG_SRC="${NGINX_CSP_IMG_SRC:-https:}"
 NGINX_CSP_MANIFEST_SRC="${NGINX_CSP_MANIFEST_SRC:-}"
 NGINX_CSP_MEDIA_SRC="${NGINX_CSP_MEDIA_SRC:-https:}"
+NGINX_CSP_MODE="${NGINX_CSP_MODE:-enforce}"
 NGINX_CSP_OBJECT_SRC="${NGINX_CSP_OBJECT_SRC:-}"
 NGINX_CSP_REPORT_URI="${NGINX_CSP_REPORT_URI:-}"
 NGINX_CSP_SCRIPT_SRC="${NGINX_CSP_SCRIPT_SRC:-}"
 NGINX_CSP_STYLE_SRC="${NGINX_CSP_STYLE_SRC:-https://fonts.googleapis.com}"
 NGINX_CSP_WORKER_SRC="${NGINX_CSP_WORKER_SRC:-}"
 NGINX_FRAME_OPTIONS="${NGINX_FRAME_OPTIONS:-deny}"
+
+# Validate input
+if [ "${NGINX_CSP_MODE}" = 'enforce' ]; then
+  NGINX_CSP_HEADER_NAME='Content-Security-Policy'
+elif [ "${NGINX_CSP_MODE}" = 'report-only' ]; then
+  NGINX_CSP_HEADER_NAME='Content-Security-Policy-Report-Only'
+else
+  echo "Nginx: invalid CSP mode ${NGINX_CSP_MODE}"
+  exit 1
+fi
 
 if [ -d /etc/nginx/site-mods-enabled.d/ ]; then
   # nginx frame options header
@@ -50,7 +62,7 @@ EOF
   # nginx content policy
   echo "Nginx: configuring content security policy…"
   cat <<EOF >> /etc/nginx/site-mods-enabled.d/00-generated-security.conf
-add_header 'Content-Security-Policy' "\
+add_header '${NGINX_CSP_HEADER_NAME}' "\
 default-src 'self'; \
 child-src 'self' data: blob: ${NGINX_CSP_CHILD_SRC}; \
 connect-src 'self' data: blob: ${NGINX_CSP_CONNECT_SRC}; \
