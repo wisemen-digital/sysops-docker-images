@@ -21,10 +21,6 @@ jobs:
       matrix:
         info:
           - version: latest
-            target: secure
-          - version: latest-unsecured
-            target: unsecured
     with:
       image: web-base
       version: ${{ matrix.info.version }}
-      target: ${{ matrix.info.target }}
