@@ -20,6 +20,8 @@ Serves content on port `8080`.
 
 ## Configuration
 
+Check the [general readme](../README.md) for configuring common settings.
+
 This image can be configured using the following environment variables:
 
 | Environment Key | Applied | Description |

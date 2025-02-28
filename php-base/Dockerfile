@@ -55,7 +55,7 @@ COPY php-base/config/php/ /etc/php${PHP_VERSION}/
 COPY common/config/supervisor/supervisord.conf /etc/supervisor/
 COPY common/config/supervisor/conf.d/nginx.conf /etc/supervisor/conf.d/
 # - init
-COPY php-base/scripts/ /scripts/
+COPY common/scripts/ php-base/scripts/ /scripts/
 
 # Clean Up
 WORKDIR /app/www

@@ -15,7 +15,7 @@ COPY common/config/supervisor/supervisord.conf /etc/supervisor/
 COPY common/config/supervisor/conf.d/nginx.conf /etc/supervisor/conf.d/
 COPY matomo/config/supervisor/conf.d/ /etc/supervisor/conf.d/
 # - init
-COPY matomo/scripts/ /scripts/
+COPY common/scripts/ matomo/scripts/ /scripts/
 
 # Configure cron
 RUN echo "*/30 * * * * /usr/local/bin/php /var/www/html/console core:archive --verbose --no-interaction" > /etc/crontabs/www-data

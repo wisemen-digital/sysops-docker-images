@@ -20,7 +20,7 @@ COPY common/config/supervisor/supervisord.conf /etc/supervisor/
 COPY common/config/supervisor/conf.d/nginx.conf /etc/supervisor/conf.d/
 COPY nuxt-base/config/supervisor/conf.d/ /etc/supervisor/conf.d/
 # - init
-COPY nuxt-base/scripts/ /scripts/
+COPY common/scripts/ nuxt-base/scripts/ /scripts/
 
 # Clean Up
 WORKDIR /app/www
