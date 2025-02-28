@@ -26,26 +26,9 @@ COPY common/scripts/ nuxt-base/scripts/ /scripts/
 WORKDIR /app/www
 RUN chown -R nobody:nobody /scripts /app/www /run /var/lib/nginx /var/log/nginx \
   && addgroup nobody tty
+USER nobody
 EXPOSE 8080
 
 # Start supervisord by default
 ENTRYPOINT ["/scripts/docker-entrypoint.sh"]
 CMD ["serve"]
-
-#
-# --- Variant: Unsecured ---
-#
-
-FROM base AS unsecured
-
-RUN rm /etc/nginx/site-mods-enabled.d/headers-extra-security.conf
-
-USER nobody
-
-#
-# --- Variant: Secure (default) ---
-#
-
-FROM base AS secure
-
-USER nobody
