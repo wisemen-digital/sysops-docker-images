@@ -4,7 +4,6 @@
 
 Available images:
 - `latest`: normal version.
-- `latest-unsecured`: **without** extra security nginx options.
 
 ## Commands
 

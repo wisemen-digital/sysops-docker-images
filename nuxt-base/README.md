@@ -4,7 +4,6 @@
 
 Available images:
 - `lts`: normal version.
-- `lts-unsecured`: **without** extra security nginx options
 
 ## Commands
 
