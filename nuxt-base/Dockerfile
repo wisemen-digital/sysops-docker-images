@@ -23,15 +23,7 @@ COPY scripts/ /scripts/
 ENV NGINX_API_PATHS=api
 
 #
-# --- Variant: Unsecured ---
+# --- Variant: Default ---
 #
 
-FROM base AS unsecured
-
-RUN rm /etc/nginx/site-mods-enabled.d/headers-extra-security.conf
-
-#
-# --- Variant: Secure (default) ---
-#
-
-FROM base AS secure
+FROM base AS final
