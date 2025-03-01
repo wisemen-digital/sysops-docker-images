@@ -16,3 +16,7 @@ Docker will default to the `serve` command.
 ## Info
 
 Serves content on port `8080`.
+
+## Configuration
+
+Check the [general readme](../README.md) for configuring common settings.

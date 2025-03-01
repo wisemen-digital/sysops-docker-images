@@ -2,17 +2,13 @@
 
 set -euo pipefail
 
-
 ## Bootstrap
 
-
-if [ ! -e matomo.php ]; then
-  tar cf - --one-file-system -C /usr/src/matomo . | tar xf -
-fi
-
+for script in /scripts/startup/*.sh; do
+  $script
+done
 
 ## Commands ##
-
 
 # Helper to serve all services
 if [ "$1" = 'serve' ]; then
@@ -20,7 +16,7 @@ if [ "$1" = 'serve' ]; then
 
 # Init script, for use in initContainers (for example)
 elif [ "$1" = 'init' ]; then 
-  exec /bootstrap.sh
+  exec /scripts/bootstrap.sh
 
 # Fallback: just execute given command
 else
