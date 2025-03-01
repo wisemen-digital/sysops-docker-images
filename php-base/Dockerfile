@@ -55,16 +55,16 @@ COPY php-base/config/php/ /etc/php${PHP_VERSION}/
 COPY common/config/supervisor/supervisord.conf /etc/supervisor/
 COPY common/config/supervisor/conf.d/nginx.conf /etc/supervisor/conf.d/
 # - init
-COPY php-base/scripts/docker-entrypoint.sh /
+COPY common/scripts/ php-base/scripts/ /scripts/
 
 # Clean Up
 WORKDIR /app/www
-RUN chown -R nobody:nobody /docker-entrypoint.sh /app/www /run /var/lib/nginx /var/log/nginx /etc/nginx/site-mods-available.d/max-upload.conf /etc/php${PHP_VERSION}/php-fpm.d/www.conf \
+RUN chown -R nobody:nobody /scripts /app/www /run /var/lib/nginx /var/log/nginx /etc/nginx/site-mods-enabled.d /etc/php${PHP_VERSION}/php-fpm.d/www.conf \
   && addgroup nobody tty
 EXPOSE 8080
 
 # Start supervisord by default
-ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/scripts/docker-entrypoint.sh"]
 CMD ["serve"]
 
 #

@@ -25,6 +25,12 @@ Serves content on port `8080`.
 
 ## Configuration
 
-You can configure the max. allowed uploads via these 2 variables:
-- `SERVER_POST_MAX_SIZE`: max post size (in nginx and PHP)
-- `SERVER_POST_MAX_FILESIZE`: max upload file size (in PHP)
+Check the [general readme](../README.md) for configuring common settings.
+
+This image can be configured using the following environment variables:
+
+| Environment Key | Applied | Description | Default |
+------------------|---------|------------------------
+| NGINX_MAX_BODY_SIZE | Every run | nginx: maximum client body size | `8M` |
+| PHP_POST_MAX_SIZE | Every run | PHP: maximum post size, should match nginx | `8M` |
+| PHP_POST_MAX_FILESIZE | Every run | PHP: maximum post file size | `2M` |
