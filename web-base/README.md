@@ -17,6 +17,10 @@ Docker will default to the `serve` command.
 
 Serves content on port `80`.
 
+## Configuration
+
+Check the [general readme](../README.md) for configuring common settings.
+
 # Environment Injection
 
 :exclamation: Note that, if available, it will execute the `import-meta-env` command. This relies on a few things:

@@ -2,25 +2,13 @@
 
 set -euo pipefail
 
-
 ## Bootstrap
 
-
-# Apply max post envs
-echo "client_max_body_size ${SERVER_POST_MAX_SIZE:-8M};" > /etc/nginx/site-mods-available.d/max-upload.conf
-for php_config_file in /etc/php*/php-fpm.d/www.conf; do
-  echo "php_admin_value[post_max_size] = ${SERVER_POST_MAX_SIZE:-8M}" >> "$php_config_file"
-  echo "php_admin_value[upload_max_filesize] = ${SERVER_POST_MAX_FILESIZE:-2M}" >> "$php_config_file"
+for script in /scripts/startup/*.sh; do
+  $script
 done
 
-# Cache laravel config
-if [ -f '/app/www/artisan' ]; then
-  php artisan config:cache
-fi
-
-
 ## Commands ##
-
 
 # Helper to serve all services
 if [ "$1" = 'serve' ]; then

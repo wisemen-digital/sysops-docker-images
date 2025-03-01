@@ -2,9 +2,13 @@
 
 set -euo pipefail
 
+## Bootstrap
+
+for script in /scripts/startup/*.sh; do
+  $script
+done
 
 ## Commands ##
-
 
 # Helper to serve all services
 if [ "$1" = 'serve' ]; then
