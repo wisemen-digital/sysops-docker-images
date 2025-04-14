@@ -2,7 +2,16 @@
 
 set -euo pipefail
 
-# Configure nginx security based on ENV vars.
+# Configure nginx security based on ENV vars, and if available the defaults
+# located at `/etc/csp-generator/default`.
+#
+# The defaults file should be a list of variable declarations, such as
+# `CHILD_SRC="…"`. Essentially 1 variable for each option that exists. Be
+# careful about using quotes though! Keywords such as `none` need to be
+# surrounded by single `'` quotes, so the value would be `"'none'"`.
+#
+# Equivalent settings can be set via ENV, just prefix the variables with
+# `NGINX_CSP_…`, like `NGINX_CSP_CHILD_SRC`.
 #
 # Inputs (aside from all the individual CSP settings):
 # - NGINX_CSP_MODE: defaults to 'enforce'
@@ -41,6 +50,16 @@ map "" \$$1 {
 EOF
 }
 
+# Load embedded CSP values from file (if it exists)
+EMBEDDED_CSP_PATH=/etc/csp-generator/default
+if [ -f "${EMBEDDED_CSP_PATH}" ]; then
+  echo "Nginx: found CSP defaults at '$EMBEDDED_CSP_PATH', processing…"
+  PROCESSED_CSP_PATH=$(mktemp)
+  sed 's/[^=]\+=/export EMBEDDED_CSP_&/' "${EMBEDDED_CSP_PATH}" > "${PROCESSED_CSP_PATH}"
+  . "${PROCESSED_CSP_PATH}"
+  rm "${PROCESSED_CSP_PATH}"
+fi
+
 # nginx frame options header
 if [ "${NGINX_FRAME_OPTIONS}" = 'disable' ]; then
   echo "Nginx: configuring frame options as disabled…"
@@ -54,12 +73,14 @@ fi
 csp_item() {
   item="$1"
 
-  # Lookup values if needed, checking `NGINX_CSP_…`
+  # Lookup values if needed, checking `EMBEDDED_CSP_…` and `NGINX_CSP_…`
   if [ -n "${2:-}" ]; then
     value="$2"
   else
     uc_item=$(echo "$item" | tr '[:lower:]-' '[:upper:]_')
-    value=$(printenv "NGINX_CSP_${uc_item}" || true)
+    embedded_val=$( (printenv "EMBEDDED_CSP_${uc_item}" || true) | sed 's/^"//; s/"$//')
+    nginx_val=$( (printenv "NGINX_CSP_${uc_item}" || true) | sed 's/^"//; s/"$//')
+    value="${embedded_val}${embedded_val:+${nginx_val:+ }}${nginx_val}"
   fi
 
   # Only output if we have a value

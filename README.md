@@ -25,6 +25,8 @@ You can control the CSP behaviour with the `NGINX_CSP_MODE` key:
 - `enforce` (default): Configure the `Content-Security-Policy` header.
 - `report-only`: Instead configure the `Content-Security-Policy-Report-Only` header.
 
+Note: the following fetch & navigation CSP keys can also be set via an embedded file located at `/etc/csp-generator/default`.
+
 Fetch:
 
 | Environment Key | Applied | Description | Default |
