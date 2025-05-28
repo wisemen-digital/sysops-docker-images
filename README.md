@@ -15,6 +15,6 @@ Images with `nginx` can be configured using the following environment variables.
 ### Robots
 
 | Environment Key | Applied | Description | Default |
-------------------|---------|------------------------
+|-----------------|---------|-------------|---------|
 | NGINX_ROBOTS_TAG | Every run | `X-Robots-Tag` value | `none` |
-| NGINX_ROBOTS_TXT | Every run | Content of `robots.txt` | `Disallow: /` |
+| NGINX_ROBOTS_TXT | Every run | Content of `robots.txt`. Note that setting to `disable` removes the rule completely. | `Disallow: /` |
