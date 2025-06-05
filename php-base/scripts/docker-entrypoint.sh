@@ -41,7 +41,7 @@ elif [ "$1" = 'queue' ]; then
 # Helper to run websockets
 elif [ "$1" = 'websockets' ]; then 
   shift 1;
-  exec php artisan websockets:serve
+  exec php artisan reverb:start
 
 # Init script, for use in initContainers (for example)
 elif [ "$1" = 'init' ]; then 
