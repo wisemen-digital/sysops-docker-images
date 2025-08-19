@@ -36,6 +36,7 @@ RUN apk add --no-cache \
     php${PHP_VERSION}-xmlreader \
     php${PHP_VERSION}-xmlwriter \
     php${PHP_VERSION}-zip \
+    php${PHP_VERSION}-pecl-opentelemetry \
     supervisor \
     tzdata \
   && ln -sf /usr/bin/php${PHP_VERSION} /usr/bin/php \
