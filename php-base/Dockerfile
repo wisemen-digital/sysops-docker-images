@@ -25,6 +25,7 @@ RUN apk add --no-cache \
     php${PHP_VERSION}-opcache \
     php${PHP_VERSION}-openssl \
     php${PHP_VERSION}-pecl-event \
+    php${PHP_VERSION}-pecl-opentelemetry \
     php${PHP_VERSION}-pdo \
     php${PHP_VERSION}-pdo_mysql \
     php${PHP_VERSION}-pdo_sqlite \
