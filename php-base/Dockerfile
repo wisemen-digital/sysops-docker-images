@@ -24,10 +24,11 @@ RUN apk add --no-cache \
     php${PHP_VERSION}-mbstring \
     php${PHP_VERSION}-opcache \
     php${PHP_VERSION}-openssl \
-    php${PHP_VERSION}-pecl-event \
     php${PHP_VERSION}-pdo \
     php${PHP_VERSION}-pdo_mysql \
     php${PHP_VERSION}-pdo_sqlite \
+    php${PHP_VERSION}-pecl-event \
+    php${PHP_VERSION}-pecl-opentelemetry \
     php${PHP_VERSION}-pecl-redis \
     php${PHP_VERSION}-phar \
     php${PHP_VERSION}-simplexml \
@@ -36,7 +37,6 @@ RUN apk add --no-cache \
     php${PHP_VERSION}-xmlreader \
     php${PHP_VERSION}-xmlwriter \
     php${PHP_VERSION}-zip \
-    php${PHP_VERSION}-pecl-opentelemetry \
     supervisor \
     tzdata \
   && ln -sf /usr/bin/php${PHP_VERSION} /usr/bin/php \
