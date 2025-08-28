@@ -32,5 +32,6 @@ This image can be configured using the following environment variables:
 | Environment Key | Applied | Description | Default |
 |-----------------|---------|-------------|---------|
 | NGINX_MAX_BODY_SIZE | Every run | nginx: maximum client body size | `8M` |
+| PHP_FPM_MEMORY_LIMIT | Every run | PHP: maximum FPM memory limit | `256M` |
 | PHP_POST_MAX_SIZE | Every run | PHP: maximum post size, should match nginx | `8M` |
 | PHP_POST_MAX_FILESIZE | Every run | PHP: maximum post file size | `2M` |
