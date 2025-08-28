@@ -24,6 +24,7 @@ RUN apk add --no-cache \
     php${PHP_VERSION}-mbstring \
     php${PHP_VERSION}-opcache \
     php${PHP_VERSION}-openssl \
+    php${PHP_VERSION}-pcntl \
     php${PHP_VERSION}-pdo \
     php${PHP_VERSION}-pdo_mysql \
     php${PHP_VERSION}-pdo_sqlite \
@@ -78,7 +79,6 @@ ARG PHP_VERSION="83"
 # Install packages
 # hadolint ignore=DL3018
 RUN apk add --no-cache \
-    php${PHP_VERSION}-pcntl \
     php${PHP_VERSION}-pecl-swoole \
     php${PHP_VERSION}-posix
 
