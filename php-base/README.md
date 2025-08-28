@@ -35,3 +35,9 @@ This image can be configured using the following environment variables:
 | PHP_FPM_MEMORY_LIMIT | Every run | PHP: maximum FPM memory limit | `256M` |
 | PHP_POST_MAX_SIZE | Every run | PHP: maximum post size, should match nginx | `8M` |
 | PHP_POST_MAX_FILESIZE | Every run | PHP: maximum post file size | `2M` |
+
+### FPM `pm` Mode
+
+You can controle the FPM `pm` mode with the `PHP_FPM_PM` key:
+- `static` (default): Set the amount of workers to a fixed value.
+- `ondemand`: Set the amount of workers to a dynamic amount, scaling to a very high number. Meant for autoscaling setups.
