@@ -2,10 +2,10 @@
 # --- Stage 1: Base ---
 #
 
-ARG ALPINE_VERSION="3.19"
+ARG ALPINE_VERSION="3.22"
 FROM alpine:${ALPINE_VERSION} AS base
 # Note: version repeated below
-ARG PHP_VERSION="83"  
+ARG PHP_VERSION="84"  
 ARG DEFAULT_TZ="Europe/Brussels"
 
 # Install packages
@@ -81,7 +81,7 @@ CMD ["serve"]
 #
 
 FROM base AS octane
-ARG PHP_VERSION="83"
+ARG PHP_VERSION="84"
 
 # Install packages
 # hadolint ignore=DL3018
@@ -100,7 +100,7 @@ USER nobody
 #
 
 FROM base AS fpm
-ARG PHP_VERSION="83"
+ARG PHP_VERSION="84"
 
 # Install packages
 # hadolint ignore=DL3018

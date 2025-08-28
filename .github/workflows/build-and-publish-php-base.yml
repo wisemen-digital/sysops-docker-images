@@ -31,19 +31,27 @@ jobs:
             target: octane
           - version: '8.2'
             php: '82'
-            alpine: '3.20'
+            alpine: '3.22'
             target: fpm
           - version: '8.2-octane'
             php: '82'
-            alpine: '3.20'
+            alpine: '3.22'
             target: octane
           - version: '8.3'
             php: '83'
-            alpine: '3.20'
+            alpine: '3.22'
             target: fpm
           - version: '8.3-octane'
             php: '83'
-            alpine: '3.20'
+            alpine: '3.22'
+            target: octane
+          - version: '8.4'
+            php: '84'
+            alpine: '3.22'
+            target: fpm
+          - version: '8.4-octane'
+            php: '84'
+            alpine: '3.22'
             target: octane
     with:
       image: php-base
