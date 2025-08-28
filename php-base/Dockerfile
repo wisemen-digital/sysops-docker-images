@@ -61,7 +61,14 @@ COPY common/scripts/ php-base/scripts/ /scripts/
 
 # Clean Up
 WORKDIR /app/www
-RUN chown -R nobody:nobody /scripts /app/www /run /var/lib/nginx /var/log/nginx /etc/nginx/site-mods-enabled.d /etc/php${PHP_VERSION}/php-fpm.d/www.conf \
+RUN chown -R nobody:nobody \
+    /app/www \
+    /etc/nginx/site-mods-enabled.d \
+    /etc/php${PHP_VERSION}/conf.d/ \
+    /etc/php${PHP_VERSION}/php-fpm.d/ \
+    /run \
+    /var/lib/nginx \
+    /var/log/nginx \
   && addgroup nobody tty
 EXPOSE 8080
 

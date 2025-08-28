@@ -24,7 +24,12 @@ COPY common/scripts/ nuxt-base/scripts/ /scripts/
 
 # Clean Up
 WORKDIR /app/www
-RUN chown -R nobody:nobody /scripts /app/www /run /var/lib/nginx /var/log/nginx /etc/nginx/site-mods-enabled.d \
+RUN chown -R nobody:nobody \
+    /app/www \
+    /etc/nginx/site-mods-enabled.d \
+    /run \
+    /var/lib/nginx \
+    /var/log/nginx \
   && addgroup nobody tty
 EXPOSE 8080
 
