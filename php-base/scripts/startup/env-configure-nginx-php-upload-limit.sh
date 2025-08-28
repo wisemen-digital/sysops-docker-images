@@ -22,14 +22,16 @@ client_max_body_size ${NGINX_MAX_BODY_SIZE};
 EOF
 fi
 
-for php_config_file in /etc/php*/php-fpm.d/www.conf; do
+for php_config_dir in /etc/php*/conf.d; do
+  php_config_file="$php_config_dir/upload-limits.ini"
+
   # PHP upload limits
   echo "PHP: configuring max upload with '${PHP_POST_MAX_SIZE}'…"
   cat <<EOF >> "$php_config_file"
-php_admin_value[post_max_size] = ${PHP_POST_MAX_SIZE}
+post_max_size = ${PHP_POST_MAX_SIZE}
 EOF
   echo "PHP: configuring max file upload with '${PHP_POST_MAX_FILESIZE}'…"
   cat <<EOF >> "$php_config_file"
-php_admin_value[upload_max_filesize] = ${PHP_POST_MAX_FILESIZE}
+upload_max_filesize = ${PHP_POST_MAX_FILESIZE}
 EOF
 done
