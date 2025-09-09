@@ -34,7 +34,7 @@ fi
 
 # Cleanup
 (docker rmi "$BASE_IMAGE_NAME" || true) > /dev/null && \
-  (docker rmi "$IMAGE_NAME" || true) > /dev/null
+  (docker rmi "$IMAGE_NAME:$IMAGE_TAG" || true) > /dev/null
 
 # Build
 if [[ -n "${BASE_IMAGE_TARGET:-}" ]]; then

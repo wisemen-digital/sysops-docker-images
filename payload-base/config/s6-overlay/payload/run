@@ -4,6 +4,6 @@ with-contenv
 s6-envdir -I /secrets
 importas -D "" PWD PWD
 execline-cd $PWD
-export HOSTNAME 0.0.0.0
+export HOSTNAME 127.0.0.1
 export PORT 3000
 node ./server.js
