@@ -13,7 +13,7 @@ done
 # Helper to serve all services
 if [ "$1" = 'serve' ]; then
   export CURRENT_WORKING_DIRECTORY=$(pwd)
-  export HOSTNAME=0.0.0.0 PORT=3000
+  export HOSTNAME=127.0.0.1 PORT=3000
   exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
 
 # Helper to run workers
