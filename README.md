@@ -12,6 +12,12 @@ Changes to this repository will trigger a build and push to GitHub packages auto
 
 Images with `nginx` can be configured using the following environment variables.
 
+### CORS
+
+| Environment Key | Applied | Description | Default |
+|-----------------|---------|-------------|---------|
+| NGINX_CORS_ORIGINS | Every run | Comma separated list of hostnames (without `https://`) | `*` |
+
 ### Robots
 
 | Environment Key | Applied | Description | Default |
