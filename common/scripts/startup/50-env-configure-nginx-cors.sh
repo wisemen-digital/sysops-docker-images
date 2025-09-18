@@ -8,7 +8,7 @@ set -euo pipefail
 # - NGINX_CORS_ORIGINS: defaults to '*'
 
 # Set defaults & clean up (normalize, trim, …)
-NGINX_CONFIG_FILE=/etc/nginx/snippets/var-cors-origin.conf
+NGINX_CONFIG_FILE=/etc/nginx/snippets/vars/cors-origin.conf
 NGINX_CORS_ORIGINS=$(echo "${NGINX_CORS_ORIGINS:-*}" \
   | sed 's/,/ /g; s/^ *//; s/ *$//; s/  */ /g')
 

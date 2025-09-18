@@ -27,6 +27,7 @@ WORKDIR /app/www
 RUN chown -R nobody:nobody \
     /app/www \
     /etc/nginx/site-mods-enabled.d \
+    /etc/nginx/snippets/vars/ \
     /run \
     /var/lib/nginx \
     /var/log/nginx \

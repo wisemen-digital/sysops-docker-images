@@ -64,6 +64,7 @@ WORKDIR /app/www
 RUN chown -R nobody:nobody \
     /app/www \
     /etc/nginx/site-mods-enabled.d \
+    /etc/nginx/snippets/vars/ \
     /etc/php${PHP_VERSION}/conf.d/ \
     /etc/php${PHP_VERSION}/php-fpm.d/ \
     /run \
