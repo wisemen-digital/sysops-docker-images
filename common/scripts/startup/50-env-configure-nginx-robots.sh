@@ -9,25 +9,26 @@ set -euo pipefail
 # - NGINX_ROBOTS_TXT: defaults to 'Disallow: /', note that setting to `disable` removes the rule completely.
 
 # Set defaults
+NGINX_CONFIG_FILE_MODS=/etc/nginx/site-mods-enabled.d/generated-robots.conf
+NGINX_CONFIG_FILE_VARS=/etc/nginx/snippets/vars/robots-tag.conf
 NGINX_ROBOTS_TAG="${NGINX_ROBOTS_TAG:-none}"
 NGINX_ROBOTS_TXT="${NGINX_ROBOTS_TXT:-Disallow: /}"
 
-# Check nginx structure
-if [ ! -d /etc/nginx/site-mods-enabled.d/ ]; then
-  exit 0
+# robots tag header
+if [ -f "${NGINX_CONFIG_FILE_VARS}" ]; then
+  echo "Nginx: configuring robots tag header with '${NGINX_ROBOTS_TAG}'…"
+  cat <<EOF > "${NGINX_CONFIG_FILE_VARS}"
+# Configure indexing
+map "" \$x_robots_tag {
+  default "${NGINX_ROBOTS_TAG}";
+}
+EOF
 fi
 
-# robots tag header
-echo "Nginx: configuring robots tag header with '${NGINX_ROBOTS_TAG}'…"
-cat <<EOF > /etc/nginx/site-mods-enabled.d/generated-robots.conf
-# Configure indexing
-add_header 'X-Robots-Tag' '${NGINX_ROBOTS_TAG}';
-EOF
-
 # robots.txt file
-if [ "${NGINX_ROBOTS_TXT}" != 'disable' ]; then
+if [ -d /etc/nginx/site-mods-enabled.d/ ] && [ "${NGINX_ROBOTS_TXT}" != 'disable' ]; then
   echo "Nginx: configuring robots.txt with '${NGINX_ROBOTS_TXT}'…"
-  cat <<EOF >> /etc/nginx/site-mods-enabled.d/generated-robots.conf
+  cat <<EOF > "${NGINX_CONFIG_FILE_MODS}"
 # Configure crawlers
 location = /robots.txt {
   add_header 'Content-Type' 'text/plain';
