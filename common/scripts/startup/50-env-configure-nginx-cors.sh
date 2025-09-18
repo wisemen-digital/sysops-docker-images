@@ -14,7 +14,6 @@ NGINX_CORS_ORIGINS=$(echo "${NGINX_CORS_ORIGINS:-*}" \
 
 # Check nginx structure
 if [ ! -f "${NGINX_CONFIG_FILE}" ]; then
-  echo "Nginx: cors-origin.conf file is missing, skipping configuring it…"
   exit 0
 fi
 

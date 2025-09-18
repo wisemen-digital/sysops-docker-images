@@ -14,7 +14,6 @@ NGINX_ROBOTS_TXT="${NGINX_ROBOTS_TXT:-Disallow: /}"
 
 # Check nginx structure
 if [ ! -d /etc/nginx/site-mods-enabled.d/ ]; then
-  echo "Nginx: site-mods-enabled folder is missing, skipping robots…"
   exit 0
 fi
 
