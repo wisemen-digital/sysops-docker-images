@@ -1,8 +1,8 @@
 ---
-name: Build & Publish
+name: Build, Test & Publish
 
 #
-# Internal workflow to build and publish a package
+# Internal workflow to build, test and publish a package
 #
 
 on:
@@ -29,11 +29,40 @@ on:
         description: Build context path (defaults to the image's path)
         type: string
         required: false
+      run-tests:
+        description: Whether to run tests or not
+        required: false
+        default: true
+        type: boolean
 
 jobs:
+  build-and-test:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+    steps:
+      - name: Checkout
+        if: inputs.run-tests
+        uses: actions/checkout@v5
+      - name: Build & test
+        if: inputs.run-tests
+        uses: ./.github/actions/build-and-test
+        with:
+          image: ${{ inputs.image }}
+          version: ${{ inputs.version }}
+          target: ${{ inputs.target }}
+          build-args: ${{ inputs.build-args }}
+          context: ${{ inputs.context }}
+
   build-and-publish:
-    if: (github.ref == 'refs/heads/main' && github.event_name == 'push') || github.event_name == 'workflow_dispatch'
     needs: build-and-test
+    if: >
+      github.event_name != 'pull_request' &&
+      (github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch')
     name: Build & Publish
     runs-on: ubuntu-latest
     services:

@@ -2,22 +2,26 @@
 name: Build & Publish PHP Base
 
 on:
-  schedule:
-    - cron: "0 0 1,15 * *"  # Every 2 weeks
+  pull_request:
+    paths: &watch_paths
+      - '.github/actions/**'
+      - '.github/workflows/build-and-publish-php-base.yml'
+      - '.github/workflows/internal-build-test-and-publish.yml'
+      - 'common/**'
+      - 'php-base/**'
+      - 'tests/php-base/**'
+      - 'tests/run-tests.sh'
   push:
     branches:
       - main
-    paths:
-      - '.github/actions/**'
-      - '.github/workflows/build-and-publish-php-base.yml'
-      - '.github/workflows/internal-build-and-publish.yml'
-      - 'common/**'
-      - 'php-base/**'
+    paths: *watch_paths
+  schedule:
+    - cron: "0 0 1,15 * *"  # Every 2 weeks
   workflow_dispatch:
 
 jobs:
-  build-and-publish:
-    uses: ./.github/workflows/internal-build-and-publish.yml
+  build-test-and-publish:
+    uses: ./.github/workflows/internal-build-test-and-publish.yml
     strategy:
       matrix:
         version:

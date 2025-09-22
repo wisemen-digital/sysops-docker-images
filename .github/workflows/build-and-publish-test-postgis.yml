@@ -2,21 +2,24 @@
 name: Build & Publish Test Postgis
 
 on:
-  schedule:
-    - cron: "0 0 1,15 * *"  # Every 2 weeks
+  pull_request:
+    paths: &watch_paths
+      - '.github/actions/**'
+      - '.github/workflows/build-and-publish-test-postgis.yml'
+      - '.github/workflows/internal-build-test-and-publish.yml'
+      - 'test-postgis/**'
   push:
     branches:
       - main
-    paths:
-      - '.github/actions/**'
-      - '.github/workflows/build-and-publish-test-postgis.yml'
-      - '.github/workflows/internal-build-and-publish.yml'
-      - 'test-postgis/**'
+    paths: *watch_paths
+  schedule:
+    - cron: "0 0 1,15 * *"  # Every 2 weeks
   workflow_dispatch:
 
 jobs:
-  build-and-publish:
-    uses: ./.github/workflows/internal-build-and-publish.yml
+  build-test-and-publish:
+    uses: ./.github/workflows/internal-build-test-and-publish.yml
     with:
       image: test-postgis
       version: latest
+      run-tests: false
