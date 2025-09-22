@@ -10,6 +10,7 @@ Available images:
 Docker will default to the `serve` command.
 
 - `serve`: starts all services, such as `nginx`.
+- `queue`: process queued jobs.
 - `node`: helper to execute node commands.
 - fallback: execute the provided command.
 

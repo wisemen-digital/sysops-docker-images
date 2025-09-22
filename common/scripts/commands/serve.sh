@@ -1,0 +1,2 @@
+#!/usr/bin/env sh
+exec /usr/bin/supervisord -c /etc/supervisor/supervisord.conf
