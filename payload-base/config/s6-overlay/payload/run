@@ -1,0 +1,9 @@
+#!/usr/bin/execlineb -P
+s6-setuidgid nobody
+with-contenv
+s6-envdir -I /secrets
+importas -D "" PWD PWD
+execline-cd $PWD
+export HOSTNAME 0.0.0.0
+export PORT 3000
+node ./server.js

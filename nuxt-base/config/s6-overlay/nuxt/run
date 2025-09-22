@@ -1,0 +1,7 @@
+#!/usr/bin/execlineb -P
+s6-setuidgid nobody
+with-contenv
+s6-envdir -I /secrets
+importas -D "" PWD PWD
+execline-cd $PWD
+node ./server/index.mjs

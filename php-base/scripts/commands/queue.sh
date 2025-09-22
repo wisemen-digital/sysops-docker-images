@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-exec php artisan queue:work \
+safe_exec php artisan queue:work \
   --verbose \
   --tries=3 \
   --timeout=60 \

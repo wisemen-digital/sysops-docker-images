@@ -47,15 +47,10 @@ RUN apk add --no-cache \
 # Copy configuration files
 # - php
 COPY config/php/ /etc/php${PHP_VERSION}/
+# - s6-overlay
+COPY config/s6-overlay /etc/s6-overlay/s6-rc.d/
 # - init
 COPY scripts/ /scripts/
-
-# Clean Up
-WORKDIR /app/www
-RUN chown -R nobody:nobody \
-    /etc/php${PHP_VERSION}/conf.d/ \
-    /etc/php${PHP_VERSION}/php-fpm.d/
-EXPOSE 8080
 
 #
 # --- Variant: Octane ---
@@ -72,9 +67,7 @@ RUN apk add --no-cache \
 
 # Copy configuration files
 COPY config/nginx/http.d/default-octane.conf /etc/nginx/http.d/default.conf
-COPY config/supervisor/conf.d/php-octane.conf /etc/supervisor/conf.d/
-
-USER nobody
+RUN touch /etc/s6-overlay/s6-rc.d/user/contents.d/php-octane
 
 #
 # --- Variant: FPM (default) ---
@@ -91,6 +84,4 @@ RUN apk add --no-cache \
 
 # Copy configuration files
 COPY config/nginx/http.d/default-fpm.conf /etc/nginx/http.d/default.conf
-COPY config/supervisor/conf.d/php-fpm.conf /etc/supervisor/conf.d/
-
-USER nobody
+RUN touch /etc/s6-overlay/s6-rc.d/user/contents.d/php-fpm

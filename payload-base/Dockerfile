@@ -14,8 +14,8 @@ RUN apk add --no-cache \
 # Copy configuration files
 # - nginx
 COPY config/nginx/http.d/ /etc/nginx/http.d/
-# - supervisor
-COPY config/supervisor/conf.d/ /etc/supervisor/conf.d/
+# - s6-overlay
+COPY config/s6-overlay /etc/s6-overlay/s6-rc.d/
 # - init
 COPY scripts/ /scripts/
 
@@ -24,5 +24,3 @@ COPY scripts/ /scripts/
 #
 
 FROM base AS final
-
-USER nobody

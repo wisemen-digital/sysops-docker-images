@@ -2,31 +2,25 @@
 
 set -euo pipefail
 
-# Bootstrap
-
 # Set defaults
 SECRET_DIR=/secrets
 
-# Load secrets into env vars
-if [ -d "$SECRET_DIR" ]; then
-  for f in "$SECRET_DIR"/*; do
-    [ -f "$f" ] || continue
-    key=$(basename "$f")
-    value=$(cat "$f")
-    export "$key=$value"
-  done
-fi
-
-for script in /scripts/startup/*.sh; do
-  $script
-done
+# Helper to run a command, invoking startup scripts, dropping down to `nobody`
+# user, and loading secrets into ENV.
+#
+# Note: this is needed because for some reason we can't use
+# `/init s6-rc -up change …` to start a specific oneshot without starting all
+# default services.
+safe_exec() {
+  /etc/s6-overlay/s6-rc.d/startup-scripts/data/run.sh
+  exec su nobody -s /bin/sh -c "s6-envdir -I \"$SECRET_DIR\" $*"
+}
 
 # Check if command matches, otherwise fallback to executing it
 COMMAND_SCRIPT="/scripts/commands/${1}.sh"
-export CURRENT_WORKING_DIRECTORY="$PWD"
 if [ -x "$COMMAND_SCRIPT" ]; then
   shift 1
   . "$COMMAND_SCRIPT"
 else
-  exec "$@"
+  safe_exec "$@"
 fi

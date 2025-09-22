@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-exec php artisan "$@"
+safe_exec php artisan "$@"

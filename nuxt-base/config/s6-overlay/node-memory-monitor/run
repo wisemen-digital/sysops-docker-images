@@ -1,0 +1,4 @@
+#!/usr/bin/execlineb -P
+s6-setuidgid nobody
+with-contenv
+/etc/s6-overlay/s6-rc.d/node-memory-monitor/data/run.sh

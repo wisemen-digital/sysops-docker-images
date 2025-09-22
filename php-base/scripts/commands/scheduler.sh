@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-exec sh -c '
+safe_exec sh -c '
   while [ true ]; do
     php artisan schedule:run --verbose --no-interaction &
     sleep 60
