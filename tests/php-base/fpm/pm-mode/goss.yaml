@@ -1,0 +1,7 @@
+---
+command:
+  check fpm config:
+    exec: 'cat "/etc/php$(php -r ''echo PHP_MAJOR_VERSION.PHP_MINOR_VERSION;'')/php-fpm.d/www.conf"'
+    exit-status: 0
+    stdout:
+      - 'pm = ondemand'

@@ -1,0 +1,14 @@
+---
+http:
+  robots custom header:
+    headers:
+      - 'X-Robots-Tag: all'
+    status: 200
+    url: http://localhost:80/
+  robots custom txt:
+    body:
+      - 'User-agent: *'
+      - 'Disallow: /admin/'
+      - 'Disallow: /internal/'
+    status: 200
+    url: http://localhost:80/robots.txt

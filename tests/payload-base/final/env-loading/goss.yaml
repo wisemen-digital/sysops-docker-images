@@ -1,0 +1,8 @@
+---
+http:
+  check envs and secrets:
+    body:
+      - '"CLIENT_ID": "test123"'
+      - '"CLIENT_SECRET": "secret123"'
+    status: 200
+    url: http://localhost:8080/env

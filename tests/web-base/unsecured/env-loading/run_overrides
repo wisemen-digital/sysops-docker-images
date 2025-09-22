@@ -1,0 +1,4 @@
+CUSTOM_ARGUMENTS=(
+  --mount "type=bind,ro,source=$PWD/extra-files/env.example,target=/etc/import-meta-env/example"
+  --mount "type=bind,ro,source=$PWD/extra-files/secrets,target=/secrets"
+)

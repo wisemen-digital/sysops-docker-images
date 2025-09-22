@@ -1,0 +1,7 @@
+---
+command:
+  schedule worker is running:
+    exec: 'ps -a | grep artisan'
+    exit-status: 0
+    stdout:
+      - 'artisan schedule:run'

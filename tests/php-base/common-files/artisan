@@ -1,0 +1,43 @@
+#!/usr/bin/env php
+<?php
+
+$firstArg = $argv[1] ?? '';
+
+switch ($firstArg) {
+  case 'config:cache':
+    break;
+
+  case 'migrate':
+    echo "Running migrations… Done!\n";
+    break;
+
+  case 'octane:start':
+    echo "Starting PHP Octane server…\n";
+    passthru("php -d variables_order=EGPCS -S 127.0.0.1:3000 index.php");
+    break;
+
+  case 'queue:work':
+    $queue = $argc == 10 ? preg_replace('/^--queue=/', '', $argv[9]) : 'default';
+    echo "Working queue '{$queue}'…\n";
+    while (true) {
+      sleep(10);
+    }
+    break;
+
+  case 'schedule:run':
+    echo "Processing cron jobs… ";
+    sleep(3);
+    echo "Done!\n";
+    break;
+
+  case 'websockets:serve':
+    echo "Starting WebSocket server…\n";
+    while (true) {
+      sleep(10);
+    }
+    break;
+
+  default:
+    echo "Unknown command: $firstArg\n";
+    break;
+}

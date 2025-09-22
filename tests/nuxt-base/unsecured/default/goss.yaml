@@ -1,0 +1,71 @@
+---
+http:
+  # Check default headers
+  index default headers:
+    body:
+      - 'Hey from index.mjs'
+    headers:
+      - 'Cross-Origin-Opener-Policy: same-origin'
+      - 'Cross-Origin-Resource-Policy: same-origin'
+      - 'Permissions-Policy: interest-cohort=()'
+      - 'Referrer-Policy: same-origin'
+      - 'Strict-Transport-Security'
+      - 'X-Content-Type-Options: nosniff'
+      - 'X-Permitted-Cross-Domain-Policies: none'
+      - 'X-Robots-Tag: none'
+    status: 200
+    url: http://localhost:8080/
+  resource default headers:
+    body:
+      - 'Hey from style.css'
+    headers:
+      - 'Access-Control-Allow-Origin: *'
+      - 'Cache-Control: public, immutable, max-age=31536000, s-maxage=31536000'
+      - 'Cross-Origin-Resource-Policy: same-origin'
+      - 'Strict-Transport-Security'
+      - 'X-Content-Type-Options: nosniff'
+      - 'X-Robots-Tag: none'
+    status: 200
+    url: http://localhost:8080/style.css
+  api default headers:
+    body:
+      - 'Hey from index.mjs'
+    headers:
+      - 'Access-Control-Allow-Origin: *'
+      - 'Referrer-Policy: no-referrer'
+      - 'Strict-Transport-Security'
+      - 'X-Content-Type-Options: nosniff'
+      - 'X-Robots-Tag: none'
+    status: 200
+    url: http://localhost:8080/api/foo
+
+  # Check CORS
+  cors prefetch resource works: &cors-works
+    headers:
+      - 'Access-Control-Allow-Origin: *'
+      - 'Access-Control-Allow-Methods'
+      - 'Access-Control-Allow-Headers'
+      - 'Access-Control-Max-Age'
+    method: OPTIONS
+    status: 204
+    url: http://localhost:8080/style.css
+  cors prefetch api works:
+    <<: *cors-works
+    url: http://localhost:8080/api/foo
+
+  # Check gzip
+  large file gzip:
+    headers:
+      - 'Content-Encoding: gzip'
+    request-headers:
+      - 'Accept-Encoding: gzip'
+    status: 200
+    url: http://localhost:8080/lorem.txt
+
+  # Check robots generation
+  robots default content:
+    body:
+      - 'User-agent: *'
+      - 'Disallow'
+    status: 200
+    url: http://localhost:8080/robots.txt

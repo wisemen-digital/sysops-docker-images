@@ -1,0 +1,7 @@
+---
+http:
+  check php config:
+    body:
+      - 'memory_limit</td><td class="v">2G'
+    status: 200
+    url: http://localhost:8080/phpinfo-config

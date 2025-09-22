@@ -1,0 +1,8 @@
+---
+command:
+  queue worker is running:
+    exec: 'ps -a | grep artisan'
+    exit-status: 0
+    stdout:
+      - 'artisan queue:work'
+      - '--queue=my_queue'

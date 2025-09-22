@@ -1,0 +1,7 @@
+---
+command:
+  check nginx config:
+    exec: 'nginx -T'
+    exit-status: 0
+    stdout:
+      - 'client_max_body_size 1G;'

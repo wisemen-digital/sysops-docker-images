@@ -1,0 +1,8 @@
+---
+http:
+  check envs and secrets:
+    body:
+      - '''CLIENT_ID'']</td><td class="v">test123'
+      - '''CLIENT_SECRET'']</td><td class="v">secret123'
+    status: 200
+    url: http://localhost:8080/phpinfo-vars

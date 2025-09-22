@@ -1,0 +1,7 @@
+---
+http:
+  robots no txt:
+    body:
+      - Hey from server.js
+    status: 200
+    url: http://localhost:8080/robots.txt

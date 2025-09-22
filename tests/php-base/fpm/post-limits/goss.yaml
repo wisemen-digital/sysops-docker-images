@@ -1,0 +1,14 @@
+---
+command:
+  check nginx config:
+    exec: 'nginx -T'
+    exit-status: 0
+    stdout:
+      - 'client_max_body_size 1G;'
+http:
+  check php config:
+    body:
+      - 'post_max_size</td><td class="v">1G'
+      - 'upload_max_filesize</td><td class="v">300M'
+    status: 200
+    url: http://localhost:8080/phpinfo-config
