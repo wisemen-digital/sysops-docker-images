@@ -1,15 +1,16 @@
 ---
 name: Build & Publish PHP Base
 
-on:  # yamllint disable-line rule:truthy
+on:
   schedule:
     - cron: "0 0 1,15 * *"  # Every 2 weeks
   push:
     branches:
       - main
     paths:
-      - .github/workflows/build-and-publish-php-base.yml
-      - .github/workflows/internal-build-and-publish.yml
+      - '.github/actions/**'
+      - '.github/workflows/build-and-publish-php-base.yml'
+      - '.github/workflows/internal-build-and-publish.yml'
       - 'common/**'
       - 'php-base/**'
   workflow_dispatch:
@@ -19,44 +20,26 @@ jobs:
     uses: ./.github/workflows/internal-build-and-publish.yml
     strategy:
       matrix:
-        image: [php-base]
-        info:
-          - version: '8.1'
+        version:
+          - alpine: '3.19'
+            name: '8.1'
             php: '81'
-            alpine: '3.19'
-            target: fpm
-          - version: '8.1-octane'
-            php: '81'
-            alpine: '3.19'
-            target: octane
-          - version: '8.2'
+          - alpine: '3.22'
+            name: '8.2'
             php: '82'
-            alpine: '3.22'
-            target: fpm
-          - version: '8.2-octane'
-            php: '82'
-            alpine: '3.22'
-            target: octane
-          - version: '8.3'
+          - alpine: '3.22'
+            name: '8.3'
             php: '83'
-            alpine: '3.22'
-            target: fpm
-          - version: '8.3-octane'
-            php: '83'
-            alpine: '3.22'
-            target: octane
-          - version: '8.4'
+          - alpine: '3.22'
+            name: '8.4'
             php: '84'
-            alpine: '3.22'
-            target: fpm
-          - version: '8.4-octane'
-            php: '84'
-            alpine: '3.22'
-            target: octane
+        target:
+          - fpm
+          - octane
     with:
       image: php-base
-      version: ${{ matrix.info.version }}
-      target: ${{ matrix.info.target }}
+      version: ${{ matrix.version.name }}${{ matrix.target == 'fpm' && '' || format('-{0}', matrix.target) }}
+      target: ${{ matrix.target }}
       build-args: |
-        ALPINE_VERSION=${{ matrix.info.alpine }}
-        PHP_VERSION=${{ matrix.info.php }}
+        ALPINE_VERSION=${{ matrix.version.alpine }}
+        PHP_VERSION=${{ matrix.version.php }}

@@ -1,0 +1,59 @@
+---
+name: "Build base for given image"
+description: "Builds base Docker image for the given image"
+
+inputs:
+  image:
+    description: "Image name (subdir containing Dockerfile)"
+    required: true
+  build-args:
+    description: "Build arguments to pass along to Docker"
+    required: false
+  platforms:
+    description: "Platforms (architectures) to build for"
+    required: false
+
+outputs:
+  build-context:
+    description: "Built docker image context"
+    value: ${{ steps.parse.outputs.reference }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Parse Dockerfile and export build args
+      id: parse
+      shell: bash
+      run: |
+        # Export build arguments
+        if [ -n "${{ inputs.build-args }}" ]; then
+          export $(echo "${{ inputs.build-args }}" | xargs)
+        fi
+
+        DOCKERFILE="./${{ inputs.image }}/Dockerfile"
+
+        if grep -qE 'FROM common:.*-nginx AS' "$DOCKERFILE"; then
+          IMAGE="common:${ALPINE_VERSION}-nginx"
+          echo "base-image=${IMAGE}" >> "$GITHUB_OUTPUT"
+          echo "base-target=nginx" >> "$GITHUB_OUTPUT"
+          echo "reference=${IMAGE}=docker-image://localhost:5000/${IMAGE}" >> "$GITHUB_OUTPUT"
+        elif grep -qE 'FROM common:.* AS' "$DOCKERFILE"; then
+          IMAGE="common:${ALPINE_VERSION}"
+          echo "base-image=${IMAGE}" >> "$GITHUB_OUTPUT"
+          echo "base-target=base" >> "$GITHUB_OUTPUT"
+          echo "reference=${IMAGE}=docker-image://localhost:5000/${IMAGE}" >> "$GITHUB_OUTPUT"
+        fi
+    - name: Build base image (if needed)
+      if: steps.parse.outputs.base-image != ''
+      uses: docker/build-push-action@v6
+      with:
+        context: ./common/
+        platforms: ${{ inputs.platforms }}
+        push: true
+        tags: localhost:5000/${{ steps.parse.outputs.base-image }}
+        target: ${{ steps.parse.outputs.base-target }}
+        build-args: ${{ inputs.build-args }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+      env:
+        DOCKER_BUILD_SUMMARY: false

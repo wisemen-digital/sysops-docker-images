@@ -2,6 +2,7 @@
 # --- Stage 1: Build ---
 #
 
+ARG ALPINE_VERSION="3.22"
 FROM node:lts AS build
 
 # Build import env tool
@@ -15,32 +16,17 @@ RUN npm i @import-meta-env/cli && \
 # --- Stage 2: Base ---
 #
 
-FROM nginx:stable-alpine AS base
-
-# Install packages
-# hadolint ignore=DL3018
-RUN apk add --no-cache \
-    supervisor
+FROM common:${ALPINE_VERSION}-nginx AS base
 
 # Copy configuration files
 # - nginx
-COPY common/config/nginx/ /etc/nginx/
-COPY web-base/config/nginx/http.d/ /etc/nginx/http.d/
-RUN rm -f /etc/nginx/conf.d/default.conf
-# - supervisor
-COPY common/config/supervisor/supervisord.conf /etc/supervisor/
-COPY common/config/supervisor/conf.d/nginx.conf /etc/supervisor/conf.d/
+COPY config/nginx/http.d/ /etc/nginx/http.d/
 # - init
-COPY common/scripts/ web-base/scripts/ /scripts/
+COPY scripts/ /scripts/
 COPY --from=build /app/import-meta-env /usr/bin/import-meta-env
 
-# Clean Up
-WORKDIR /app/www
+# Legacy, need to get rid of this at some point
 EXPOSE 80
-
-# Start supervisord by default
-ENTRYPOINT ["/scripts/docker-entrypoint.sh"]
-CMD ["serve"]
 
 #
 # --- Variant: Unsecured ---

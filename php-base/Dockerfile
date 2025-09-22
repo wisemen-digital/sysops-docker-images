@@ -3,7 +3,8 @@
 #
 
 ARG ALPINE_VERSION="3.22"
-FROM alpine:${ALPINE_VERSION} AS base
+FROM common:${ALPINE_VERSION}-nginx AS base
+
 # Note: version repeated below
 ARG PHP_VERSION="84"  
 ARG DEFAULT_TZ="Europe/Brussels"
@@ -11,7 +12,6 @@ ARG DEFAULT_TZ="Europe/Brussels"
 # Install packages
 # hadolint ignore=DL3018
 RUN apk add --no-cache \
-    nginx \
     php${PHP_VERSION}-cli \
     php${PHP_VERSION}-common \
     php${PHP_VERSION}-curl \
@@ -38,7 +38,6 @@ RUN apk add --no-cache \
     php${PHP_VERSION}-xmlreader \
     php${PHP_VERSION}-xmlwriter \
     php${PHP_VERSION}-zip \
-    supervisor \
     tzdata \
   && ln -sf /usr/bin/php${PHP_VERSION} /usr/bin/php \
   && cp /usr/share/zoneinfo/${DEFAULT_TZ} /etc/localtime \
@@ -46,36 +45,17 @@ RUN apk add --no-cache \
   && apk del tzdata
 
 # Copy configuration files
-# - nginx
-COPY common/config/nginx/ /etc/nginx/
-RUN rm -f /etc/nginx/http.d/default.conf \
-  && rm -f /etc/nginx/site-mods-enabled.d/headers-*.conf \
-  && rm -f /etc/nginx/site-mods-enabled.d/cache-static-content.conf
 # - php
-COPY php-base/config/php/ /etc/php${PHP_VERSION}/
-# - supervisor
-COPY common/config/supervisor/supervisord.conf /etc/supervisor/
-COPY common/config/supervisor/conf.d/nginx.conf /etc/supervisor/conf.d/
+COPY config/php/ /etc/php${PHP_VERSION}/
 # - init
-COPY common/scripts/ php-base/scripts/ /scripts/
+COPY scripts/ /scripts/
 
 # Clean Up
 WORKDIR /app/www
 RUN chown -R nobody:nobody \
-    /app/www \
-    /etc/nginx/site-mods-enabled.d \
-    /etc/nginx/snippets/vars/ \
     /etc/php${PHP_VERSION}/conf.d/ \
-    /etc/php${PHP_VERSION}/php-fpm.d/ \
-    /run \
-    /var/lib/nginx \
-    /var/log/nginx \
-  && addgroup nobody tty
+    /etc/php${PHP_VERSION}/php-fpm.d/
 EXPOSE 8080
-
-# Start supervisord by default
-ENTRYPOINT ["/scripts/docker-entrypoint.sh"]
-CMD ["serve"]
 
 #
 # --- Variant: Octane ---
@@ -91,8 +71,8 @@ RUN apk add --no-cache \
     php${PHP_VERSION}-posix
 
 # Copy configuration files
-COPY php-base/config/nginx/http.d/default-octane.conf /etc/nginx/http.d/default.conf
-COPY php-base/config/supervisor/conf.d/php-octane.conf /etc/supervisor/conf.d/
+COPY config/nginx/http.d/default-octane.conf /etc/nginx/http.d/default.conf
+COPY config/supervisor/conf.d/php-octane.conf /etc/supervisor/conf.d/
 
 USER nobody
 
@@ -110,7 +90,7 @@ RUN apk add --no-cache \
   && ln -sf /usr/sbin/php-fpm${PHP_VERSION} /usr/sbin/php-fpm
 
 # Copy configuration files
-COPY php-base/config/nginx/http.d/default-fpm.conf /etc/nginx/http.d/default.conf
-COPY php-base/config/supervisor/conf.d/php-fpm.conf /etc/supervisor/conf.d/
+COPY config/nginx/http.d/default-fpm.conf /etc/nginx/http.d/default.conf
+COPY config/supervisor/conf.d/php-fpm.conf /etc/supervisor/conf.d/
 
 USER nobody

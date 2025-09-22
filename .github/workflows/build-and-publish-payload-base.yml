@@ -1,15 +1,16 @@
 ---
 name: Build & Publish Payload Base
 
-on:  # yamllint disable-line rule:truthy
+on:
   schedule:
     - cron: "0 0 1,15 * *"  # Every 2 weeks
   push:
     branches:
       - main
     paths:
-      - .github/workflows/build-and-publish-payload-base.yml
-      - .github/workflows/internal-build-and-publish.yml
+      - '.github/actions/**'
+      - '.github/workflows/build-and-publish-payload-base.yml'
+      - '.github/workflows/internal-build-and-publish.yml'
       - 'common/**'
       - 'payload-base/**'
   workflow_dispatch:
@@ -19,11 +20,11 @@ jobs:
     uses: ./.github/workflows/internal-build-and-publish.yml
     strategy:
       matrix:
-        info:
-          - version: lts
-            node: lts
+        version:
+          - alpine: '3.22'
+            name: lts
     with:
       image: payload-base
-      version: ${{ matrix.info.version }}
+      version: ${{ matrix.version.name }}
       build-args: |
-        NODE_VERSION=${{ matrix.info.node }}
+        ALPINE_VERSION=${{ matrix.version.alpine }}

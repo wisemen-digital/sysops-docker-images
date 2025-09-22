@@ -1,15 +1,16 @@
 ---
 name: Build & Publish Test Postgis
 
-on:  # yamllint disable-line rule:truthy
+on:
   schedule:
     - cron: "0 0 1,15 * *"  # Every 2 weeks
   push:
     branches:
       - main
     paths:
-      - .github/workflows/build-and-publish-test-postgis.yml
-      - .github/workflows/internal-build-and-publish.yml
+      - '.github/actions/**'
+      - '.github/workflows/build-and-publish-test-postgis.yml'
+      - '.github/workflows/internal-build-and-publish.yml'
       - 'test-postgis/**'
   workflow_dispatch:
 

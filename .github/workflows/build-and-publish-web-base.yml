@@ -1,15 +1,16 @@
 ---
 name: Build & Publish Web Base
 
-on:  # yamllint disable-line rule:truthy
+on:
   schedule:
     - cron: "0 0 1,15 * *"  # Every 2 weeks
   push:
     branches:
       - main
     paths:
-      - .github/workflows/build-and-publish-web-base.yml
-      - .github/workflows/internal-build-and-publish.yml
+      - '.github/actions/**'
+      - '.github/workflows/build-and-publish-web-base.yml'
+      - '.github/workflows/internal-build-and-publish.yml'
       - 'common/**'
       - 'web-base/**'
   workflow_dispatch:
@@ -19,12 +20,15 @@ jobs:
     uses: ./.github/workflows/internal-build-and-publish.yml
     strategy:
       matrix:
-        info:
-          - version: latest
-            target: secure
-          - version: latest-unsecured
-            target: unsecured
+        version:
+          - alpine: '3.22'
+            name: latest
+        target:
+          - secure
+          - unsecured
     with:
       image: web-base
-      version: ${{ matrix.info.version }}
-      target: ${{ matrix.info.target }}
+      version: ${{ matrix.version.name }}${{ matrix.target == 'secure' && '' || format('-{0}', matrix.target) }}
+      target: ${{ matrix.target }}
+      build-args: |
+        ALPINE_VERSION=${{ matrix.version.alpine }}
