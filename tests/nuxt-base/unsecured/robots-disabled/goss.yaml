@@ -1,7 +1,0 @@
----
-http:
-  robots no txt:
-    body:
-      - Hey from index.mjs
-    status: 200
-    url: http://localhost:8080/robots.txt
