@@ -25,7 +25,7 @@ COPY config/nginx/http.d/ /etc/nginx/http.d/
 COPY scripts/ /scripts/
 COPY --from=build /app/import-meta-env /usr/bin/import-meta-env
 
-# Legacy, need to get rid of this at some point
+# Legacy, need to get rid of this at some point, see also nginx file
 EXPOSE 80
 
 #
