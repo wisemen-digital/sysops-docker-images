@@ -1,0 +1,9 @@
+#!/usr/bin/execlineb -P
+s6-softlimit -o 10000
+s6-setuidgid nobody
+with-contenv
+s6-envdir -I /secrets
+importas -D "" PWD PWD
+execline-cd $PWD
+export LARAVEL_OCTANE 1
+php /app/www/artisan octane:start --server=swoole --host=0.0.0.0 --port=3000 --workers=1 --task-workers=0

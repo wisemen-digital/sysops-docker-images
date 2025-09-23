@@ -1,0 +1,6 @@
+#!/usr/bin/execlineb -P
+s6-softlimit -o 10000
+s6-setuidgid nobody
+with-contenv
+s6-envdir -I /secrets
+php-fpm -F

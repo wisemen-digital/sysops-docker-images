@@ -1,4 +1,10 @@
 ---
+command:
+  node monitor:
+    exec: 's6-svstat -u /run/service/node-memory-monitor'
+    exit-status: 0
+    stdout:
+      - 'true'
 port:
   tcp:8080:
     listening: true

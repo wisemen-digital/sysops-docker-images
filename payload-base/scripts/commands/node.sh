@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-exec node "$@"
+safe_exec node "$@"

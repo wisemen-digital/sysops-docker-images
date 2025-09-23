@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# Needed because Octane swallows errors and exits with 0, which would trigger
+# an endless restart loop
+echo "Octane exited with code $1" >&2
+exec s6-svscanctl -t /run/service

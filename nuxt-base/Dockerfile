@@ -14,8 +14,8 @@ RUN apk add --no-cache \
 # Copy configuration files
 # - nginx
 COPY config/nginx/http.d/ /etc/nginx/http.d/
-# - supervisor
-COPY config/supervisor/conf.d/ /etc/supervisor/conf.d/
+# - s6-overlay
+COPY config/s6-overlay /etc/s6-overlay/s6-rc.d/
 # - init
 COPY scripts/ /scripts/
 
@@ -27,12 +27,8 @@ FROM base AS unsecured
 
 RUN rm /etc/nginx/site-mods-enabled.d/headers-extra-security.conf
 
-USER nobody
-
 #
 # --- Variant: Secure (default) ---
 #
 
 FROM base AS secure
-
-USER nobody

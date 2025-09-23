@@ -1,0 +1,4 @@
+#!/usr/bin/execlineb -P
+with-contenv
+s6-envdir -I /secrets
+php-fpm -F
