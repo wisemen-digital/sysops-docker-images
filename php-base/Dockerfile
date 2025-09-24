@@ -52,6 +52,9 @@ COPY config/s6-overlay /etc/s6-overlay/s6-rc.d/
 # - init
 COPY scripts/ /scripts/
 
+# Defaults
+ENV NGINX_API_PATHS=api,oauth,livewire
+
 #
 # --- Variant: Octane ---
 #

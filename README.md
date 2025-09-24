@@ -18,6 +18,12 @@ Images with `nginx` can be configured using the following environment variables.
 |-----------------|---------|-------------|---------|
 | NGINX_CORS_ORIGINS | Every run | Comma separated list of hostnames (without `https://`) | `*` |
 
+### Paths
+
+| Environment Key | Applied | Description | Default |
+|-----------------|---------|-------------|---------|
+| NGINX_API_PATHS | Every run | Comma separated list of paths (without `/`), pointed to the `@api_backend` bucket. Note to only use this on images that have such a backend. | |
+
 ### Robots
 
 | Environment Key | Applied | Description | Default |
