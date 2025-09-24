@@ -5,12 +5,14 @@ http:
     body:
       - 'Hey from index.php'
     headers:
+      - 'Content-Security-Policy: default-src ''self'';'
       - 'Cross-Origin-Opener-Policy: same-origin'
       - 'Cross-Origin-Resource-Policy: same-origin'
       - 'Permissions-Policy: interest-cohort=()'
       - 'Referrer-Policy: same-origin'
       - 'Strict-Transport-Security'
       - 'X-Content-Type-Options: nosniff'
+      - 'X-Frame-Options: deny'
       - 'X-Permitted-Cross-Domain-Policies: none'
       - 'X-Robots-Tag: none'
     status: 200
