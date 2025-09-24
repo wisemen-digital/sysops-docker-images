@@ -1,0 +1,16 @@
+---
+http:
+  api default headers: &api-response
+    body:
+      - 'Hey from index.mjs'
+    headers:
+      - 'Access-Control-Allow-Origin: *'
+      - 'Referrer-Policy: no-referrer'
+      - 'Strict-Transport-Security'
+      - 'X-Content-Type-Options: nosniff'
+      - 'X-Robots-Tag: none'
+    status: 200
+    url: http://localhost:8080/api/foo
+  custom api default headers:
+    <<: *api-response
+    url: http://localhost:8080/custom-api/foo
