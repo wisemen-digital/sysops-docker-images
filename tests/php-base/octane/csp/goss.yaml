@@ -1,0 +1,26 @@
+---
+http:
+  check envs and secrets:
+    headers:
+      - >-
+        Content-Security-Policy-Report-Only:
+        default-src 'self';
+        child-src https://children.embedded.com 'self' https://children.environment.com data:;
+        connect-src https://connection.embedded.com 'self' https://connection.environment.com data:;
+        font-src https://fonts.embedded.com 'self' https://fonts.environment.com data:;
+        form-action https://forms.embedded.com 'self' https://forms.environment.com data:;
+        frame-ancestors https://frames-anc.embedded.com https://frames-anc.environment.com;
+        frame-src https://frames.embedded.com 'self' https://frames.environment.com data:;
+        img-src https://imgs.embedded.com 'self' https://imgs.environment.com data:;
+        manifest-src https://manifests.embedded.com 'self' https://manifests.environment.com data:;
+        media-src https://media.embedded.com 'self' https://media.environment.com data:;
+        object-src https://objects.embedded.com 'self' https://objects.environment.com data:;
+        require-trusted-types-for 'script';
+        script-src https://scripts.embedded.com 'self' 'unsafe-inline' https://scripts.environment.com data: 'unsafe-inline';
+        style-src https://styles.embedded.com 'self' 'unsafe-inline' https://styles.environment.com data: 'unsafe-inline';
+        trusted-types embedded-foo 'allow-duplicates' environment-foo env-bar;
+        worker-src https://workers.embedded.com 'self' https://workers.environment.com data:;
+        report-uri https://sentry.appwi.se/api/347/security/?sentry_key=foo123;
+      - 'X-Frame-Options: sameorigin'
+    status: 200
+    url: http://localhost:8080/
