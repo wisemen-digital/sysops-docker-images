@@ -38,12 +38,14 @@ jobs:
             name: '8.4'
             php: '84'
         target:
-          - fpm
-          - octane
+          - name: fpm
+            suffix:
+          - name: octane
+            suffix: -octane
     with:
       image: php-base
-      version: ${{ matrix.version.name }}${{ matrix.target == 'fpm' && '' || format('-{0}', matrix.target) }}
-      target: ${{ matrix.target }}
+      version: ${{ matrix.version.name }}${{ matrix.target.suffix }}
+      target: ${{ matrix.target.name }}
       build-args: |
         ALPINE_VERSION=${{ matrix.version.alpine }}
         PHP_VERSION=${{ matrix.version.php }}

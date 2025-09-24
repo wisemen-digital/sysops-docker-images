@@ -28,11 +28,13 @@ jobs:
           - alpine: '3.22'
             name: lts
         target:
-          - secure
-          - unsecured
+          - name: secure
+            suffix:
+          - name: unsecured
+            suffix: -unsecured
     with:
       image: nuxt-base
-      version: ${{ matrix.version.name }}${{ matrix.target == 'secure' && '' || format('-{0}', matrix.target) }}
-      target: ${{ matrix.target }}
+      version: ${{ matrix.version.name }}${{ matrix.target.suffix }}
+      target: ${{ matrix.target.name }}
       build-args: |
         ALPINE_VERSION=${{ matrix.version.alpine }}
