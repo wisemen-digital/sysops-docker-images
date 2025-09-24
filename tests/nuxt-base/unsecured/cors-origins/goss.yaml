@@ -20,6 +20,14 @@ snippets:
     url: http://localhost:8080/style.css
 
 http:
+  cors index:
+    body:
+      - Hey from index.mjs
+    headers:
+      - 'Cross-Origin-Resource-Policy: cross-origin'
+    status: 200
+    url: http://localhost:8080/
+
   # Normal requests
   cors api apple:
     <<: *cors-api
@@ -40,6 +48,7 @@ http:
     headers:
       - 'Access-Control-Allow-Origin: https://apple.com'
       - 'Access-Control-Allow-Credentials: true'
+      - 'Cross-Origin-Resource-Policy: cross-origin'
     request-headers:
       - 'Origin: https://apple.com'
   cors resource google:
@@ -47,6 +56,7 @@ http:
     headers:
       - 'Access-Control-Allow-Origin: https://google.com'
       - 'Access-Control-Allow-Credentials: true'
+      - 'Cross-Origin-Resource-Policy: cross-origin'
     request-headers:
       - 'Origin: https://google.com'
 

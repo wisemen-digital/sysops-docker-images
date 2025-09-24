@@ -17,6 +17,7 @@ Images with `nginx` can be configured using the following environment variables.
 | Environment Key | Applied | Description | Default |
 |-----------------|---------|-------------|---------|
 | NGINX_CORS_ORIGINS | Every run | Comma separated list of hostnames (without `https://`) | `*` |
+| NGINX_CORS_RESOURCE_POLICY | Every run | `Cross-Origin-Resource-Policy` value | `same-origin` |
 
 ### Paths
 

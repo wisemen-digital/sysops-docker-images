@@ -6,11 +6,13 @@ set -euo pipefail
 #
 # Inputs:
 # - NGINX_CORS_ORIGINS: defaults to '*'
+# - NGINX_CORS_RESOURCE_POLICY: defaults to 'same-origin'
 
 # Set defaults & clean up (normalize, trim, …)
 NGINX_CONFIG_FILE=/etc/nginx/snippets/vars/cors-origin.conf
 NGINX_CORS_ORIGINS=$(echo "${NGINX_CORS_ORIGINS:-*}" \
   | sed 's/,/ /g; s/^ *//; s/ *$//; s/  */ /g')
+NGINX_CORS_RESOURCE_POLICY="${NGINX_CORS_RESOURCE_POLICY:-same-origin}"
 
 # Check nginx structure
 if [ ! -f "${NGINX_CONFIG_FILE}" ]; then
@@ -22,7 +24,7 @@ if [ "$NGINX_CORS_ORIGINS" = "*" ]; then
   echo "Nginx: configuring CORS origin with wildcard (allow all)…"
   cat <<EOF > "${NGINX_CONFIG_FILE}"
 # Allow all origins
-map "\$http_origin" \$cors_origin {
+map "" \$cors_origin {
   default "*";
 }
 EOF
@@ -51,5 +53,14 @@ map "\$request_method:\$cors_origin" \$cors_preflight {
   "OPTIONS:"      "not-allowed";
   "~^OPTIONS:.+"  "allowed";
   default         "";
+}
+EOF
+
+# Variables used for resource `Cross-Origin-Resource-Policy`
+echo "Nginx: configuring CORS resource policy with '${NGINX_CORS_RESOURCE_POLICY}'…"
+cat <<EOF >> "${NGINX_CONFIG_FILE}"
+# Resource policy
+map "" \$cors_resource_policy {
+  default "${NGINX_CORS_RESOURCE_POLICY}";
 }
 EOF
