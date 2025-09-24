@@ -1,0 +1,3 @@
+CUSTOM_ARGUMENTS=(
+  --mount "type=bind,ro,source=$PWD/extra-files/csp.properties,target=/etc/csp-generator/default"
+)
