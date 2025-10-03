@@ -10,8 +10,7 @@ RUN apk add --no-cache \
 # - crond
 COPY matomo/config/crond/ /etc/crontabs/
 # - nginx
-COPY common/config/nginx/ /etc/nginx/
-COPY matomo/config/nginx/http.d/ /etc/nginx/http.d/
+COPY common/config/nginx matomo/config/nginx /etc/nginx/
 # - s6-overlay
 COPY common/config/s6-overlay matomo/config/s6-overlay /etc/s6-overlay/s6-rc.d/
 # - init
