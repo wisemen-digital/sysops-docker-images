@@ -3,7 +3,7 @@ http:
   check envs and secrets:
     headers:
       - >-
-        Content-Security-Policy-Report-Only:
+        Content-Security-Policy:
         default-src 'self';
         child-src https://children.embedded.com 'self' https://children.environment.com data:;
         connect-src https://connection.embedded.com 'self' https://connection.environment.com data:;

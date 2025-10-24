@@ -5,7 +5,7 @@ http:
     body:
       - 'Hey from index.php'
     headers:
-      - 'Content-Security-Policy: default-src ''self'';'
+      - 'Content-Security-Policy-Report-Only: default-src ''self'';'
       - 'Cross-Origin-Opener-Policy: same-origin'
       - 'Cross-Origin-Resource-Policy: same-origin'
       - 'Permissions-Policy: interest-cohort=()'

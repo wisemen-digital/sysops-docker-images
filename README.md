@@ -22,8 +22,8 @@ Images with `nginx` can be configured using the following environment variables.
 ### Content Security Policy
 
 You can control the CSP behaviour with the `NGINX_CSP_MODE` key:
-- `enforce` (default): Configure the `Content-Security-Policy` header.
-- `report-only`: Instead configure the `Content-Security-Policy-Report-Only` header.
+- `enforce`: Configure the `Content-Security-Policy` header.
+- `report-only` (default): Instead configure the `Content-Security-Policy-Report-Only` header.
 
 Note: the following fetch & navigation CSP keys can also be set via an embedded file located at `/etc/csp-generator/default`.
 

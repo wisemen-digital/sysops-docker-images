@@ -14,14 +14,14 @@ set -euo pipefail
 # `NGINX_CSP_…`, like `NGINX_CSP_CHILD_SRC`.
 #
 # Inputs (aside from all the individual CSP settings):
-# - NGINX_CSP_MODE: defaults to 'enforce'
+# - NGINX_CSP_MODE: defaults to 'report-only'
 # - NGINX_CSP_REPORT_URI: defaults to ''
 # - NGINX_FRAME_OPTIONS: defaults to 'deny', note that setting to `disable` removes the header completely.
 
 # Set defaults
 NGINX_CONFIG_FILE='/etc/nginx/snippets/vars/csp-and-robots.conf'
 NGINX_CSP_ITEMS='child-src connect-src font-src form-action frame-ancestors frame-src img-src manifest-src media-src object-src require-trusted-types-for script-src style-src trusted-types worker-src'
-NGINX_CSP_MODE="${NGINX_CSP_MODE:-enforce}"
+NGINX_CSP_MODE="${NGINX_CSP_MODE:-report-only}"
 NGINX_CSP_REPORT_URI="${NGINX_CSP_REPORT_URI:-}"
 NGINX_FRAME_OPTIONS="${NGINX_FRAME_OPTIONS:-deny}"
 
