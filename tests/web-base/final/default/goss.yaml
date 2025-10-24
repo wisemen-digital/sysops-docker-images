@@ -1,9 +1,9 @@
 ---
 http:
   # Check default headers
-  index default headers:
+  index default headers: &index-html-response
     body:
-      - 'Hey from server.js'
+      - 'Hey from index.html'
     headers:
       - 'Content-Security-Policy-Report-Only: default-src ''self'';'
       - 'Cross-Origin-Opener-Policy: same-origin'
@@ -16,7 +16,7 @@ http:
       - 'X-Permitted-Cross-Domain-Policies: none'
       - 'X-Robots-Tag: none'
     status: 200
-    url: http://localhost:8080/
+    url: http://localhost:80/
   resource default headers:
     body:
       - 'Hey from style.css'
@@ -28,21 +28,22 @@ http:
       - 'X-Content-Type-Options: nosniff'
       - 'X-Robots-Tag: none'
     status: 200
-    url: http://localhost:8080/style.css
-  api default headers:
-    body:
-      - 'Hey from server.js'
-    headers:
-      - 'Access-Control-Allow-Origin: *'
-      - 'Referrer-Policy: no-referrer'
-      - 'Strict-Transport-Security'
-      - 'X-Content-Type-Options: nosniff'
-      - 'X-Robots-Tag: none'
-    status: 200
-    url: http://localhost:8080/api/foo
+    url: http://localhost:80/style.css
+
+  # Check alternative paths
+  alt-path index.html works:
+    <<: *index-html-response
+    url: http://localhost:80/index.html
+  alt-path foo/bar works:
+    <<: *index-html-response
+    url: http://localhost:80/foo/bar
 
   # Check CORS
-  cors prefetch resource works: &cors-works
+  cors prefetch index fails:
+    method: OPTIONS
+    status: 405
+    url: http://localhost:80/
+  cors prefetch resource works:
     headers:
       - 'Access-Control-Allow-Origin: *'
       - 'Access-Control-Allow-Methods'
@@ -50,10 +51,7 @@ http:
       - 'Access-Control-Max-Age'
     method: OPTIONS
     status: 204
-    url: http://localhost:8080/style.css
-  cors prefetch api works:
-    <<: *cors-works
-    url: http://localhost:8080/api/foo
+    url: http://localhost:80/style.css
 
   # Check gzip
   large file gzip:
@@ -62,7 +60,7 @@ http:
     request-headers:
       - 'Accept-Encoding: gzip'
     status: 200
-    url: http://localhost:8080/lorem.txt
+    url: http://localhost:80/lorem.txt
 
   # Check robots generation
   robots default content:
@@ -70,4 +68,4 @@ http:
       - 'User-agent: *'
       - 'Disallow'
     status: 200
-    url: http://localhost:8080/robots.txt
+    url: http://localhost:80/robots.txt

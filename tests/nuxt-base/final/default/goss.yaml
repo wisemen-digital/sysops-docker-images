@@ -3,7 +3,7 @@ http:
   # Check default headers
   index default headers:
     body:
-      - 'Hey from server.js'
+      - 'Hey from index.mjs'
     headers:
       - 'Content-Security-Policy-Report-Only: default-src ''self'';'
       - 'Cross-Origin-Opener-Policy: same-origin'
@@ -31,7 +31,7 @@ http:
     url: http://localhost:8080/style.css
   api default headers:
     body:
-      - 'Hey from server.js'
+      - 'Hey from index.mjs'
     headers:
       - 'Access-Control-Allow-Origin: *'
       - 'Referrer-Policy: no-referrer'
