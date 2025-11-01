@@ -27,14 +27,8 @@ jobs:
         version:
           - alpine: '3.22'
             name: latest
-        target:
-          - name: secure
-            suffix:
-          - name: unsecured
-            suffix: -unsecured
     with:
       image: web-base
-      version: ${{ matrix.version.name }}${{ matrix.target.suffix }}
-      target: ${{ matrix.target.name }}
+      version: ${{ matrix.version.name }}
       build-args: |
         ALPINE_VERSION=${{ matrix.version.alpine }}

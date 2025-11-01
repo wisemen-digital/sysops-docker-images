@@ -31,15 +31,7 @@ COPY --from=build /app/import-meta-env /usr/bin/import-meta-env
 EXPOSE 80
 
 #
-# --- Variant: Unsecured ---
+# --- Variant: Default ---
 #
 
-FROM base AS unsecured
-
-RUN rm /etc/nginx/site-mods-enabled.d/headers-extra-security.conf
-
-#
-# --- Variant: Secure (default) ---
-#
-
-FROM base AS secure
+FROM base AS final
