@@ -65,8 +65,17 @@ ARG PHP_VERSION="84"
 # Install packages
 # hadolint ignore=DL3018
 RUN apk add --no-cache \
-    php${PHP_VERSION}-pecl-swoole \
-    php${PHP_VERSION}-posix
+    curl \
+    php${PHP_VERSION}-posix \
+  && case "${TARGETARCH:-arm64}" in \
+      amd64) FRANKEN_ARCH="x86_64" ;; \
+      arm64) FRANKEN_ARCH="aarch64" ;; \
+      *) echo "Unsupported architecture: $TARGETARCH"; exit 1 ;; \
+    esac \
+  && curl -fsSL -o /usr/local/bin/frankenphp \
+    "https://github.com/php/frankenphp/releases/latest/download/frankenphp-linux-${FRANKEN_ARCH}" \
+  && apk del curl \
+  && chmod +x /usr/local/bin/frankenphp
 
 # Copy configuration files
 COPY config/nginx/http.d/default-octane.conf /etc/nginx/http.d/default.conf
