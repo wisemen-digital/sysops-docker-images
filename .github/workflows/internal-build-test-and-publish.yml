@@ -47,7 +47,7 @@ jobs:
     steps:
       - name: Checkout
         if: inputs.run-tests
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Build & test
         if: inputs.run-tests
         uses: ./.github/actions/build-and-test
@@ -72,7 +72,7 @@ jobs:
           - 5000:5000
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Build & publish
         uses: ./.github/actions/build-and-publish
         with:
