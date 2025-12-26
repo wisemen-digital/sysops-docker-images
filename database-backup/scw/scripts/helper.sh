@@ -20,6 +20,9 @@ stop_spinner() {
   kill "$SPINNER_PID" 2>/dev/null || true
   wait "$SPINNER_PID" 2>/dev/null || true
 
+  # Clear the line completely
+  printf "\r\033[K"
+  
   if [ "$success" = true ]; then
     printf "\r[✔] %s\n" "$msg"
   else
