@@ -35,10 +35,14 @@ RUN if [ -n "$TIMESCALEDB_VERSION" ]; then \
         && wget -q -O timescaledb.tar.gz "https://github.com/timescale/timescaledb/archive/$TIMESCALEDB_VERSION.tar.gz" \
         && echo "$TIMESCALEDB_SHA256 *timescaledb.tar.gz" | sha256sum -c - \
         && tar -xzf timescaledb.tar.gz --strip-components=1 \
-        && ./bootstrap -DPROJECT_INSTALL_METHOD="docker" -DREGRESS_CHECKS=OFF \
-        && cd build && make install; \
+        && ./bootstrap -DPROJECT_INSTALL_METHOD="docker" -DREGRESS_CHECKS=OFF; \
     else \
         echo "Skipping TimescaleDB build"; \
+    fi
+
+WORKDIR /usr/src/timescaledb/build
+RUN if [ -n "$TIMESCALEDB_VERSION" ] && [ -d /usr/src/timescaledb/build ]; then \
+        make install; \
     fi
 
 # --- Stage 3: Final Runtime ---
