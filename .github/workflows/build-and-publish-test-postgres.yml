@@ -1,0 +1,53 @@
+---
+name: Build & Publish Test Postgres with optional TimescaleDB & PostGIS
+
+on:
+  pull_request:
+    paths: &watch_paths
+      - '.github/actions/**'
+      - '.github/workflows/build-and-publish-test-postgres.yml'
+      - '.github/workflows/internal-build-test-and-publish.yml'
+      - 'test-postgres/**'
+  push:
+    branches:
+      - main
+    paths: *watch_paths
+  schedule:
+    - cron: "0 0 1,15 * *"  # Every 2 weeks
+  workflow_dispatch:
+
+jobs:
+  build-test-and-publish:
+    uses: ./.github/workflows/internal-build-test-and-publish.yml
+    strategy:
+      matrix:
+        version:
+          - name: 'pg16'
+            postgres_image: '16-alpine'
+            postgis_version: ''
+            postgis_sha256: ''
+            timescaledb_version: ''
+            timescaledb_sha256: ''
+          - name: 'pg16-postgis'
+            postgres_image: '16-alpine'
+            postgis_version: '3.5.3'
+            postgis_sha256: '650e44de788d38175e3719df1d2ca4356bd987f54fe3d2030808de76464a2a06'
+            timescaledb_version: ''
+            timescaledb_sha256: ''
+          - name: 'pg16-postgis-timescaledb'
+            postgres_image: '16-alpine'
+            postgis_version: '3.5.3'
+            postgis_sha256: '650e44de788d38175e3719df1d2ca4356bd987f54fe3d2030808de76464a2a06'
+            timescaledb_version: '2.20.2'
+            timescaledb_sha256: '1fea456be213479d03ce76429b5d2b68a3703ba8fe255070ec4f62fbf7b4f556'
+    with:
+      image: test-postgres
+      version: ${{ matrix.version.name }}
+      run-tests: false
+      build-args: |
+        POSTGRES_IMAGE=${{ matrix.version.postgres_image }}
+        POSTGIS_VERSION=${{ matrix.version.postgis_version }}
+        POSTGIS_SHA256=${{ matrix.version.postgis_sha256 }}
+        TIMESCALEDB_VERSION=${{ matrix.version.timescaledb_version }}
+        TIMESCALEDB_SHA256=${{ matrix.version.timescaledb_sha256 }}
+
