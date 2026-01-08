@@ -1,14 +1,15 @@
 ARG POSTGRES_IMAGE="16-alpine"
 FROM postgres:${POSTGRES_IMAGE} AS base
 
-SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
-
 # --- Stage 1: PostGIS Builder ---
 FROM base AS postgis-builder
 ARG POSTGIS_VERSION
 ARG POSTGIS_SHA256
 WORKDIR /usr/src/postgis
 
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
+
+# hadolint ignore=DL3018
 RUN if [ -n "$POSTGIS_VERSION" ]; then \
         apk add --no-cache build-base autoconf automake libtool pkgconfig file gcc g++ make perl libxml2-dev proj-dev geos-dev gdal-dev json-c-dev protobuf-c-dev postgresql-dev clang19 clang-dev llvm19 llvm-dev --repository http://dl-cdn.alpinelinux.org/alpine/edge/main --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
         && wget -q -O postgis.tar.gz "https://download.osgeo.org/postgis/source/postgis-$POSTGIS_VERSION.tar.gz" \
@@ -25,6 +26,8 @@ FROM base AS timescaledb-builder
 ARG TIMESCALEDB_VERSION
 ARG TIMESCALEDB_SHA256
 WORKDIR /usr/src/timescaledb
+
+SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 # hadolint ignore=DL3018
 RUN if [ -n "$TIMESCALEDB_VERSION" ]; then \
