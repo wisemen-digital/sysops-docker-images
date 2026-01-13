@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 
-set -euo pipefail
+set -eu
 
 # Inject environment variables
-ENV_EXAMPLE_PATH=/etc/import-meta-env/example
+readonly ENV_EXAMPLE_PATH=/etc/import-meta-env/example
 if [ -f $ENV_EXAMPLE_PATH ]; then
   echo "Found example env at '$ENV_EXAMPLE_PATH', applying to codebase…"
   import-meta-env \

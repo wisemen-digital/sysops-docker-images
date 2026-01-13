@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-set -euo pipefail
+set -eu
 
 # Configure PHP FPM `pm` based on ENV vars
 #
@@ -8,17 +8,17 @@ set -euo pipefail
 # - PHP_FPM_PM: defaults to 'static'
 
 # Set defaults
-PHP_FPM_PM="${PHP_FPM_PM:-static}"
+readonly PHP_FPM_PM="${PHP_FPM_PM:-static}"
 
 # Validate input
 if [ "$PHP_FPM_PM" = 'static' ]; then
-  PM_SNIPPET='
+  readonly PM_SNIPPET='
 pm = static
 pm.max_children = 5
 pm.max_requests = 1000
 '
 elif [ "$PHP_FPM_PM" = 'ondemand' ]; then
-  PM_SNIPPET='
+  readonly PM_SNIPPET='
 pm = ondemand
 pm.max_children = 80
 pm.process_idle_timeout = 30s;

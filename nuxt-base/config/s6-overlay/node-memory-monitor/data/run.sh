@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-set -euo pipefail
+set -eu
 
 # Configure PHP FPM `pm` based on ENV vars
 #

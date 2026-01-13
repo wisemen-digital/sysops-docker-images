@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-set -euo pipefail
+set -eu
 
 # Configure PHP FPM memory limits based on ENV vars
 #
@@ -8,7 +8,7 @@ set -euo pipefail
 # - PHP_FPM_MEMORY_LIMIT: defaults to '256M'
 
 # Set defaults
-PHP_FPM_MEMORY_LIMIT="${PHP_FPM_MEMORY_LIMIT:-256M}"
+readonly PHP_FPM_MEMORY_LIMIT="${PHP_FPM_MEMORY_LIMIT:-256M}"
 
 for php_config_file in /etc/php*/php-fpm.d/www.conf; do
   # PHP memory limits

@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 
-set -euo pipefail
+set -eu
 
 # Set defaults
-SECRET_DIR=/secrets
+readonly SECRET_DIR=/secrets
 
 # Correct permissions so we can run as `nobody`
 EXTRA_DIRS=
@@ -16,7 +16,7 @@ chown nobody:nogroup \
   $EXTRA_DIRS
 
 # Ensure our working path is correct
-OLD_PWD="$PWD"
+readonly OLD_PWD="$PWD"
 if [ -d /app/www ]; then
   cd /app/www
 fi

@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-set -euo pipefail
+set -eu
 
 # Configure nginx CORS rules based on ENV vars
 #
@@ -8,8 +8,8 @@ set -euo pipefail
 # - NGINX_API_PATHS: defaults to '' (empty list)
 
 # Set defaults & clean up (normalize, trim, …)
-NGINX_CONFIG_FILE=/etc/nginx/site-mods-enabled.d/generated-api-paths.conf
-NGINX_API_PATHS=$(echo "${NGINX_API_PATHS:-}" \
+readonly NGINX_CONFIG_FILE=/etc/nginx/site-mods-enabled.d/generated-api-paths.conf
+readonly NGINX_API_PATHS=$(echo "${NGINX_API_PATHS:-}" \
   | sed 's/,/ /g; s/^ *//; s/ *$//; s/  */ /g')
 
 # Check nginx structure

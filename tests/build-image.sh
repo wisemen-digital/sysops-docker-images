@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+set -eu
 
-IMAGE_NAME=$1
-IMAGE_TAG=$2
-IMAGE_TARGET=$3
-VERSIONS=$4
-DOCKERFILE="./$IMAGE_NAME/Dockerfile"
+readonly IMAGE_NAME=$1
+readonly IMAGE_TAG=$2
+readonly IMAGE_TARGET=$3
+readonly VERSIONS=$4
+readonly DOCKERFILE="./$IMAGE_NAME/Dockerfile"
 
 # Load versions into ENV
 if [ -n "$VERSIONS" ]; then
@@ -25,11 +25,11 @@ done <<< "$(echo -e "$VERSIONS")"
 
 # Calculate base
 if grep -qE 'FROM common:.*-nginx AS' "$DOCKERFILE"; then
-  BASE_IMAGE_NAME="common:${ALPINE_VERSION}-nginx"
-  BASE_IMAGE_TARGET=nginx
+  readonly BASE_IMAGE_NAME="common:${ALPINE_VERSION}-nginx"
+  readonly BASE_IMAGE_TARGET=nginx
 elif grep -qE 'FROM common:.* AS' "$DOCKERFILE"; then
-  BASE_IMAGE_NAME="common:${ALPINE_VERSION}"
-  BASE_IMAGE_TARGET=base
+  readonly BASE_IMAGE_NAME="common:${ALPINE_VERSION}"
+  readonly BASE_IMAGE_TARGET=base
 fi
 
 # Cleanup
