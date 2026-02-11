@@ -70,5 +70,4 @@ RUN if [ -n "$TIMESCALEDB_VERSION" ]; then \
     fi
 
 # Initialization scripts
-COPY ./init-postgis.sh /docker-entrypoint-initdb.d/1.postgis.sh
-COPY ./init-timescaledb.sh /docker-entrypoint-initdb.d/2.timescaledb.sh
+COPY ./init /docker-entrypoint-initdb.d/
