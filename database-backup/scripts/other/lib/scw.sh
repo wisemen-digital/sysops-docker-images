@@ -43,6 +43,22 @@ scw_fetch_or_create_backup() {
 scw_wait_on_backup() {
   scw_cmd rdb backup wait "$1" \
     timeout="$SCW_BACKUP_TIMEOUT" > /dev/null
+  
+  # Because stable could be error as well, do our own wait just in case
+  backup_status=
+  until [ "$backup_status" = 'ready' ]; do
+    if ! result=$(scw_cmd rdb backup get "$1" 2>&1); then
+      echo "Failed to get backup status (wait for ready): $result" >&2
+      return 1
+    fi
+
+    backup_status=$(printf '%s\n' "$result" | jq -r '.status')
+    case "$backup_status" in
+      ready) ;;
+      error) echo "Bakcup in error state!"; return 1 ;;
+      *) sleep 1 ;;
+    esac
+  done
 }
 
 # Params:
@@ -58,14 +74,15 @@ scw_get_ready_backups() {
 # Params:
 # - Database Backup ID
 scw_export_backup() {
-  backup_status=
+  scw_cmd rdb backup export "$1" >/dev/null
+}
 
-  until [ "$backup_status" = 'ready' ]; do
-    result=$(scw_cmd rdb backup export "$1" 2>&1) || return 1
-    backup_status=$(printf '%s\n' "$result" | jq -r '.status')
-    [ "$backup_status" = 'ready' ] || sleep 1
-  done
-  
+scw_get_backup_export_url() {
+  if ! result=$(scw_cmd rdb backup get "$1" 2>&1); then
+    echo "Failed to get export: $result" >&2
+    return 1
+  fi
+
   printf '%s\n' "$result" | jq -r '.download_url'
 }
 
@@ -84,15 +101,23 @@ scw_sync_backups() {
   scw_get_ready_backups "$1" "$2" | while read -r backup; do
     backup_id=$(echo "$backup" | jq -r '.ID')
     backup_name=$(echo "$backup" | jq -r '.name')
-    echo "Syncing backup ${backup_name} (${backup_id})…"
 
-    # Get export URL
-    if ! download_url=$(scw_export_backup "$backup_id"); then
+    # Get export URL. Note that this is not instant, we need to wait until they're finished
+    echo "Exporting backup ${backup_name} (${backup_id})…"
+    if ! scw_export_backup "$backup_id"; then
+      echo "Failed to export backup ${backup_id}" >&2
+      continue
+    fi
+
+    echo "Waiting for backup ${backup_id} to be ready…"
+    scw_wait_on_backup "$backup_id"
+    if ! download_url=$(scw_get_backup_export_url "$backup_id"); then
       echo "Failed to export backup ${backup_id}: ${download_url}" >&2
       continue
     fi
 
     # Sync it
+    echo "Syncing backup ${backup_name} (${backup_id})…"
     "$sync_callback" "$download_url" "$backup_name"
 
     # Delete backup

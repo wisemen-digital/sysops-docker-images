@@ -24,7 +24,7 @@ readonly RCLONE_TARGET="s3-remote:${S3_BUCKET}/${S3_PATH}"
 case "$DB_PROVIDER" in
   scw)
     # Create (or fetch existing) backup
-    echo "Creating (or fetching) backup…"
+    echo "Creating (or fetching) backup ${BACKUP_NAME}…"
     if ! backup_id=$(scw_fetch_or_create_backup "$DB_INSTANCE_ID" "$DB_NAME" "$BACKUP_NAME"); then
       echo "Failed to create backup: ${backup_id}" >&2
       exit 1
