@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-set -euo pipefail
+set -eu
 
 # Configure nginx CORS rules based on ENV vars
 #
@@ -9,10 +9,10 @@ set -euo pipefail
 # - NGINX_CORS_RESOURCE_POLICY: defaults to 'same-origin'
 
 # Set defaults & clean up (normalize, trim, …)
-NGINX_CONFIG_FILE=/etc/nginx/snippets/vars/cors-origin.conf
-NGINX_CORS_ORIGINS=$(echo "${NGINX_CORS_ORIGINS:-*}" \
+readonly NGINX_CONFIG_FILE=/etc/nginx/snippets/vars/cors-origin.conf
+readonly NGINX_CORS_ORIGINS=$(echo "${NGINX_CORS_ORIGINS:-*}" \
   | sed 's/,/ /g; s/^ *//; s/ *$//; s/  */ /g')
-NGINX_CORS_RESOURCE_POLICY="${NGINX_CORS_RESOURCE_POLICY:-same-origin}"
+readonly NGINX_CORS_RESOURCE_POLICY="${NGINX_CORS_RESOURCE_POLICY:-same-origin}"
 
 # Check nginx structure
 if [ ! -f "${NGINX_CONFIG_FILE}" ]; then

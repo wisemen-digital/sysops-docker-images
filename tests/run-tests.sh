@@ -4,9 +4,9 @@ set -euo pipefail
 shopt -s nullglob
 
 # Note: drop the "tag" from the name
-IMAGE_NAME=$1
-SUITE_NAME=${IMAGE_NAME%%:*}
-IMAGE_TARGET=$2
+readonly IMAGE_NAME=$1
+readonly SUITE_NAME=${IMAGE_NAME%%:*}
+readonly IMAGE_TARGET=$2
 
 run_test() {
   echo "Running ${1}…"
@@ -50,7 +50,7 @@ dgoss_run() {
 }
 
 # Check we have a test suite
-TEST_DIR="tests/$SUITE_NAME/$IMAGE_TARGET"
+readonly TEST_DIR="tests/$SUITE_NAME/$IMAGE_TARGET"
 if [ ! -d "$TEST_DIR" ]; then
   echo "Error: missing test suite '$TEST_DIR'"
   exit 1

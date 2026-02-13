@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-set -euo pipefail
+set -eu
 
 # Move static files, so we can serve `/_next/static/…`
 if [ -d "/app/www/.next/static" ]; then

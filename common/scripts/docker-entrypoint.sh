@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 
-set -euo pipefail
+set -eu
 
 # Set defaults
-SECRET_DIR=/secrets
+readonly SECRET_DIR=/secrets
 
 # Helper to run a command, invoking startup scripts, dropping down to `nobody`
 # user, and loading secrets into ENV.
@@ -17,7 +17,7 @@ safe_exec() {
 }
 
 # Check if command matches, otherwise fallback to executing it
-COMMAND_SCRIPT="/scripts/commands/${1}.sh"
+readonly COMMAND_SCRIPT="/scripts/commands/${1}.sh"
 if [ -x "$COMMAND_SCRIPT" ]; then
   shift 1
   . "$COMMAND_SCRIPT"

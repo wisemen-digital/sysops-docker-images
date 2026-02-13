@@ -1,0 +1,35 @@
+---
+name: Build & Publish Database Backup
+
+on:
+  pull_request:
+    paths: &watch_paths
+      - '.github/actions/**'
+      - '.github/workflows/build-and-publish-database-backup.yml'
+      - '.github/workflows/internal-build-test-and-publish.yml'
+      - 'common/**'
+      - 'database-backup/**'
+  push:
+    branches:
+      - main
+    paths: *watch_paths
+  schedule:
+    - cron: "0 0 1,15 * *"  # Every 2 weeks
+  workflow_dispatch:
+
+jobs:
+  build-test-and-publish:
+    uses: ./.github/workflows/internal-build-test-and-publish.yml
+    strategy:
+      matrix:
+        version:
+          - alpine: '3.23'
+            name: lts
+            scw: '2.52'
+    with:
+      image: database-backup
+      version: ${{ matrix.version.name }}
+      run-tests: false
+      build-args: |
+        ALPINE_VERSION=${{ matrix.version.alpine }}
+        SCW_VERSION=${{ matrix.version.scw }}

@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-set -euo pipefail
+set -eu
 
 # Configure nginx robots rules based on ENV vars
 #
@@ -9,10 +9,10 @@ set -euo pipefail
 # - NGINX_ROBOTS_TXT: defaults to 'Disallow: /', note that setting to `disable` removes the rule completely.
 
 # Set defaults
-NGINX_CONFIG_FILE_MODS=/etc/nginx/site-mods-enabled.d/generated-robots.conf
-NGINX_CONFIG_FILE_VARS=/etc/nginx/snippets/vars/robots-tag.conf
-NGINX_ROBOTS_TAG="${NGINX_ROBOTS_TAG:-none}"
-NGINX_ROBOTS_TXT="${NGINX_ROBOTS_TXT:-Disallow: /}"
+readonly NGINX_CONFIG_FILE_MODS=/etc/nginx/site-mods-enabled.d/generated-robots.conf
+readonly NGINX_CONFIG_FILE_VARS=/etc/nginx/snippets/vars/robots-tag.conf
+readonly NGINX_ROBOTS_TAG="${NGINX_ROBOTS_TAG:-none}"
+readonly NGINX_ROBOTS_TXT="${NGINX_ROBOTS_TXT:-Disallow: /}"
 
 # robots tag header
 if [ -f "${NGINX_CONFIG_FILE_VARS}" ]; then

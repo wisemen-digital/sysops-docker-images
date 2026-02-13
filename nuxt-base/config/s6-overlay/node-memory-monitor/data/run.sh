@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-set -euo pipefail
+set -eu
 
 # Configure PHP FPM `pm` based on ENV vars
 #
@@ -12,6 +12,7 @@ set -euo pipefail
 MONITOR_MEM_THRESHOLD="${MONITOR_MEM_THRESHOLD:-85}"
 MONITOR_PID_NAME="${MONITOR_PID_NAME:-node}"
 SLEEP_INTERVAL=10
+SHUTDOWN_GRACE_PERIOD=10
 
 # -- Helpers --
 
@@ -60,6 +61,15 @@ echo "Monitoring '$MONITOR_PID_NAME' memory usage, threshold of ${MONITOR_MEM_TH
 while true; do
   if ! check_usage $threshold ; then
     echo "WARNING: memory exceeded, trying to stop gracefully…"
+
+    # Set external checks to fail and wait grace period
+    echo "Disabling external probes…"
+    echo "return 503;" > /etc/nginx/snippets/nuxt-probes-content.conf
+    nginx -s reload
+    sleep "$SHUTDOWN_GRACE_PERIOD"
+
+    # Actually exit
+    echo "Finished grace period wait"
     exit 1
   fi
   sleep "$SLEEP_INTERVAL"
