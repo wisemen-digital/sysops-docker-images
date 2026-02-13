@@ -2,6 +2,7 @@
 
 SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 . "${SCRIPT_DIR}/../other/lib/_common.sh"
+. "${SCRIPT_DIR}/../other/lib/rclone.sh"
 
 # Configure rclone tool with a set of S3 credentials
 #
@@ -16,8 +17,11 @@ SCRIPT_DIR=$(cd "$(dirname "$0")" && pwd)
 # Input validation
 require_env_vars S3_PROVIDER S3_ACCESS_KEY_ID S3_SECRET_ACCESS_KEY S3_REGION S3_ENDPOINT
 
+echo "Configuring rclone remote…"
+
 # Create configuration, will be used by later rclone invocations
-rclone config create s3-remote s3 \
+rclone_bootstrap_config
+rclone_cmd config create s3-remote s3 \
   provider "$S3_PROVIDER" \
   access_key_id "$S3_ACCESS_KEY_ID" \
   secret_access_key "$S3_SECRET_ACCESS_KEY" \

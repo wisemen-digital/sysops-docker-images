@@ -8,8 +8,24 @@ fi
 
 # Constants
 readonly RCLONE_CONCURRENCY=2
+readonly RCLONE_CONFIG_DIR=/etc/rclone
+readonly RCLONE_CONFIG_PATH="${RCLONE_CONFIG_DIR}/rclone.conf"
 readonly RCLONE_CHUNK_SIZE=16M
 readonly RCLONE_TIMEOUT=30s
+
+rclone_cmd() {
+  rclone --config="$RCLONE_CONFIG_PATH" $@
+}
+
+#
+# === Setup ===
+#
+
+rclone_bootstrap_config() {
+  mkdir -p "$RCLONE_CONFIG_DIR"
+  rclone_cmd config touch >/dev/null 2>&1
+  chmod a+r $RCLONE_CONFIG_PATH
+}
 
 #
 # === RDB Backup Functions ===
@@ -20,7 +36,7 @@ readonly RCLONE_TIMEOUT=30s
 # - Target
 rclone_copy_url() {
   # Note: limit memory use by setting low concurrency & chunk size
-  rclone copyurl "$1" "$2" \
+  rclone_cmd copyurl "$1" "$2" \
     --low-level-retries 5 \
     --no-check-certificate \
     --progress \
