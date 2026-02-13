@@ -39,10 +39,12 @@ rclone_copy_url() {
   rclone_cmd copyurl "$1" "$2" \
     --low-level-retries 5 \
     --no-check-certificate \
-    --progress \
     --retries 2 \
     --s3-chunk-size "$RCLONE_CHUNK_SIZE" \
     --s3-upload-concurrency "$RCLONE_CONCURRENCY" \
+    --stats 4s \
+    --stats-one-line \
+    --stats-log-level NOTICE \
     --timeout 30s \
     --transfers 1
 }
