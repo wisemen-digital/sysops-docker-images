@@ -17,6 +17,7 @@ FROM common:${ALPINE_VERSION} AS base
 # hadolint ignore=DL3018
 RUN apk add --no-cache \
     curl \
+    jq \
     openssh-client \
     rclone
 
