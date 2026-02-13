@@ -24,7 +24,7 @@ jobs:
       matrix:
         version:
           - alpine: '3.23'
-            name: lts
+            name: latest
             scw: '2.52'
     with:
       image: database-backup
