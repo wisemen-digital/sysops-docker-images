@@ -119,8 +119,12 @@ scw_sync_backups() {
     # Sync it
     echo "Syncing backup ${backup_name} (${backup_id})…"
     "$sync_callback" "$download_url" "$backup_name"
+    
+    echo "Finished syncing backup ${backup_name} (${backup_id}). Deleting backup from provider…"
 
     # Delete backup
     scw_delete_backup "$backup_id"
+
+    echo "Finished processing backup ${backup_name} (${backup_id})."
   done
 }
