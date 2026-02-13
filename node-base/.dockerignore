@@ -1,0 +1,14 @@
+# General
+**/.DS_Store
+**/*.md
+**/LICENSE
+
+# Git
+**/.git
+**/.github
+**/.gitattributes
+**/.gitignore
+
+# Docker
+**/.dockerignore
+**/Dockerfile
