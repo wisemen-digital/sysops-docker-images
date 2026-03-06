@@ -109,7 +109,7 @@ scw_sync_backups() {
       continue
     fi
 
-    echo "Waiting for backup ${backup_id} to be ready…"
+    echo "Waiting for backup ${backup_id} (${backup_id}) to be ready…"
     scw_wait_on_backup "$backup_id"
     if ! download_url=$(scw_get_backup_export_url "$backup_id"); then
       echo "Failed to export backup ${backup_id}: ${download_url}" >&2
@@ -119,10 +119,9 @@ scw_sync_backups() {
     # Sync it
     echo "Syncing backup ${backup_name} (${backup_id})…"
     "$sync_callback" "$download_url" "$backup_name"
-    
-    echo "Finished syncing backup ${backup_name} (${backup_id}). Deleting backup from provider…"
 
     # Delete backup
+    echo "Deleting backup ${backup_name} (${backup_id}) from provider…"
     scw_delete_backup "$backup_id"
 
     echo "Finished processing backup ${backup_name} (${backup_id})."
