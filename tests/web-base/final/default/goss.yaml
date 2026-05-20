@@ -5,6 +5,7 @@ http:
     body:
       - 'Hey from index.html'
     headers:
+      - 'Cache-Control: no-cache, must-revalidate'
       - 'Content-Security-Policy-Report-Only: default-src ''self'';'
       - 'Cross-Origin-Opener-Policy: same-origin'
       - 'Cross-Origin-Resource-Policy: same-origin'
