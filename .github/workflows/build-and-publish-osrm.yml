@@ -1,0 +1,35 @@
+---
+name: Build & Publish OSRM
+
+on:
+  pull_request:
+    paths: &watch_paths
+      - '.github/actions/**'
+      - '.github/workflows/build-and-publish-osrm.yml'
+      - '.github/workflows/internal-build-test-and-publish.yml'
+      - 'osrm/**'
+  push:
+    branches:
+      - main
+    paths: *watch_paths
+  schedule:
+    - cron: "0 0 1,15 * *"  # Every 2 weeks
+  workflow_dispatch:
+
+jobs:
+  build-test-and-publish:
+    uses: ./.github/workflows/internal-build-test-and-publish.yml
+    strategy:
+      matrix:
+        # https://github.com/Project-OSRM/osrm-backend/blob/master/docs/profiles.md
+        profile: [car, foot, bicycle]
+        config:
+          - bounding_box: '1.555595,49.082412,7.532158,51.870980'
+            regions: 'europe/belgium europe/luxembourg europe/netherlands/noord-brabant europe/netherlands/zeeland europe/netherlands/limburg europe/france/champagne-ardenne europe/france/franche-comte europe/france/haute-normandie europe/france/ile-de-france europe/france/lorraine europe/france/nord-pas-de-calais europe/france/picardie europe/germany/nordrhein-westfalen europe/germany/rheinland-pfalz europe/germany/saarland'
+    with:
+      name: 'osrm-be-ne-fr-de-${{ matrix.profile }}'
+      version: latest
+      build-args: |
+        OSRM_PROFILE=${{ matrix.profile }}
+        OSRM_BOUNDING_BOX=${{ matrix.config.bounding_box }}
+        OSRM_REGIONS=${{ matrix.config.regions }}
