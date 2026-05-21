@@ -23,6 +23,7 @@ FROM osrm/osrm-backend:${OSRM_VERSION} AS build
 COPY --from=data-prepare /data/region.osm.pbf /data/region.osm.pbf
 
 WORKDIR /data
+# hadolint ignore=SC2086
 RUN osrm-extract --profile /opt/${OSRM_PROFILE}.lua region.osm.pbf && \
     osrm-partition region.osrm && \
     osrm-customize region.osrm
