@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     make \
     g++ \
     procps \
+    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
 # GitHub CLI — useful if you want to create PRs from the runner
