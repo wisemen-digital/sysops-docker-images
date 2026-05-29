@@ -6,7 +6,7 @@ ARG PNPM_VERSION=10.23.0
 
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
-ENV NODE_ENV=production
+ENV NODE_ENV=local
 
 # System tools
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -24,6 +24,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     make \
     g++ \
     procps \
+    postgresql-client \
     && rm -rf /var/lib/apt/lists/*
 
 # GitHub CLI — useful if you want to create PRs from the runner
