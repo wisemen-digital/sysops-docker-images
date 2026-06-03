@@ -22,11 +22,23 @@ jobs:
     strategy:
       matrix:
         version:
-          - name: 'pg16'
-            postgres_image: '16-alpine'
-            postgis_version: '3.6.3'
+          - alpine: '3.22'
+            postgis: '3.6.3'
             postgis_sha256: '58ff19ae133e470280efb4949ef92e0364d4c2a66bef8c57e69477348d815ea3'
-            timescaledb_version: '2.27.2'
+            postgres: '16'
+            timescaledb: '2.27.2'
+            timescaledb_sha256: 'ba47569618b8b8e6b2d58ee27bb0429b8f7954dac3edbcf1ff6ecd6bdc479316'
+          - alpine: '3.22'
+            postgis: '3.6.3'
+            postgis_sha256: '58ff19ae133e470280efb4949ef92e0364d4c2a66bef8c57e69477348d815ea3'
+            postgres: '17'
+            timescaledb: '2.27.2'
+            timescaledb_sha256: 'ba47569618b8b8e6b2d58ee27bb0429b8f7954dac3edbcf1ff6ecd6bdc479316'
+          - alpine: '3.22'
+            postgis: '3.6.3'
+            postgis_sha256: '58ff19ae133e470280efb4949ef92e0364d4c2a66bef8c57e69477348d815ea3'
+            postgres: '18'
+            timescaledb: '2.27.2'
             timescaledb_sha256: 'ba47569618b8b8e6b2d58ee27bb0429b8f7954dac3edbcf1ff6ecd6bdc479316'
         target:
           - name: bare
@@ -37,12 +49,13 @@ jobs:
             suffix: -postgis-timescaledb
     with:
       image: test-postgres
-      version: ${{ matrix.version.name }}${{ matrix.target.suffix }}
+      version: ${{ matrix.version.postgres }}${{ matrix.target.suffix }}
       target: ${{ matrix.target.name }}
       run-tests: false
       build-args: |
-        POSTGRES_IMAGE=${{ matrix.version.postgres_image }}
-        POSTGIS_VERSION=${{ matrix.version.postgis_version }}
+        ALPINE_VERSION=${{ matrix.version.alpine }}
         POSTGIS_SHA256=${{ matrix.version.postgis_sha256 }}
-        TIMESCALEDB_VERSION=${{ matrix.version.timescaledb_version }}
+        POSTGIS_VERSION=${{ matrix.version.postgis }}
+        POSTGRES_VERSION=${{ matrix.version.postgres }}
         TIMESCALEDB_SHA256=${{ matrix.version.timescaledb_sha256 }}
+        TIMESCALEDB_VERSION=${{ matrix.version.timescaledb }}

@@ -2,14 +2,16 @@
 # --- Stage 1: Base ---
 #
 
-ARG POSTGRES_IMAGE="16-alpine"
-FROM postgres:${POSTGRES_IMAGE} AS base
+ARG ALPINE_VERSION="3.22"
+ARG POSTGRES_VERSION="16"
+FROM postgres:${POSTGRES_VERSION}-alpine${ALPINE_VERSION} AS base
 
 #
 # --- Stage 2: PostGIS Builder ---
 #
 
 FROM base AS postgis-builder
+ARG ALPINE_VERSION
 
 WORKDIR /usr/src/postgis
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
@@ -37,8 +39,8 @@ RUN apk add --no-cache \
     postgresql-dev \
     proj-dev \
     protobuf-c-dev \
-    --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-    --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing
+    --repository http://dl-cdn.alpinelinux.org/alpine/v${ALPINE_VERSION}/main \
+    --repository http://dl-cdn.alpinelinux.org/alpine/v${ALPINE_VERSION}/community
 
 ARG POSTGIS_VERSION
 ARG POSTGIS_SHA256
@@ -68,6 +70,7 @@ RUN apk add --no-cache \
     coreutils \
     dpkg \
     dpkg-dev \
+    icu-dev \
     gcc \
     libc-dev \
     llvm-dev \
@@ -96,6 +99,7 @@ FROM base AS bare
 #
 
 FROM base AS postgis
+ARG ALPINE_VERSION
 
 # hadolint ignore=DL3018
 RUN apk add --no-cache \
@@ -104,8 +108,8 @@ RUN apk add --no-cache \
     json-c \
     proj \
     protobuf-c \
-    --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-    --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing
+    --repository http://dl-cdn.alpinelinux.org/alpine/v${ALPINE_VERSION}/main \
+    --repository http://dl-cdn.alpinelinux.org/alpine/v${ALPINE_VERSION}/community
 
 COPY --from=postgis-builder /usr/local/lib/postgresql/ /usr/local/lib/postgresql/
 COPY --from=postgis-builder /usr/local/share/postgresql/extension/ /usr/local/share/postgresql/extension/
