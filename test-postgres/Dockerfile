@@ -10,8 +10,6 @@ FROM postgres:${POSTGRES_IMAGE} AS base
 #
 
 FROM base AS postgis-builder
-ARG POSTGIS_VERSION
-ARG POSTGIS_SHA256
 
 WORKDIR /usr/src/postgis
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
@@ -40,20 +38,23 @@ RUN apk add --no-cache \
     proj-dev \
     protobuf-c-dev \
     --repository http://dl-cdn.alpinelinux.org/alpine/edge/main \
-    --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing \
-  && wget -q -O postgis.tar.gz "https://download.osgeo.org/postgis/source/postgis-$POSTGIS_VERSION.tar.gz" \
+    --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing
+
+ARG POSTGIS_VERSION
+ARG POSTGIS_SHA256
+RUN wget -q -O postgis.tar.gz "https://download.osgeo.org/postgis/source/postgis-$POSTGIS_VERSION.tar.gz" \
   && echo "$POSTGIS_SHA256 *postgis.tar.gz" | sha256sum -c - \
-  && tar -xzf postgis.tar.gz --strip-components=1 \
-  && ./configure CC=gcc CXX=g++ --with-raster --with-topology --without-wagyu --without-llvm \
-  && make -s && make -s install
+  && tar -xzf postgis.tar.gz --strip-components=1
+
+RUN ./configure CC=gcc CXX=g++ --with-raster --with-topology --without-wagyu --without-llvm \
+  && make -s \
+  && make -s install
 
 #
 # --- Stage 3: TimescaleDB Builder ---
 #
 
 FROM base AS timescaledb-builder
-ARG TIMESCALEDB_VERSION
-ARG TIMESCALEDB_SHA256
 
 WORKDIR /usr/src/timescaledb
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
@@ -71,11 +72,15 @@ RUN apk add --no-cache \
     libc-dev \
     llvm-dev \
     openssl-dev \
-    util-linux-dev \
-  && wget -q -O timescaledb.tar.gz "https://github.com/timescale/timescaledb/archive/$TIMESCALEDB_VERSION.tar.gz" \
+    util-linux-dev
+
+ARG TIMESCALEDB_VERSION
+ARG TIMESCALEDB_SHA256
+RUN wget -q -O timescaledb.tar.gz "https://github.com/timescale/timescaledb/archive/$TIMESCALEDB_VERSION.tar.gz" \
   && echo "$TIMESCALEDB_SHA256 *timescaledb.tar.gz" | sha256sum -c - \
-  && tar -xzf timescaledb.tar.gz --strip-components=1 \
-  && ./bootstrap -DPROJECT_INSTALL_METHOD="docker" -DREGRESS_CHECKS=OFF
+  && tar -xzf timescaledb.tar.gz --strip-components=1
+
+RUN ./bootstrap -DPROJECT_INSTALL_METHOD="docker" -DREGRESS_CHECKS=OFF
 
 WORKDIR /usr/src/timescaledb/build
 RUN make install
