@@ -84,13 +84,13 @@ RUN make install
 # --- Variant: Bare ---
 #
 
-FROM base as bare
+FROM base AS bare
 
 #
 # --- Variant: PostGIS ---
 #
 
-FROM base as postgis
+FROM base AS postgis
 
 # hadolint ignore=DL3018
 RUN apk add --no-cache \
@@ -104,19 +104,19 @@ RUN apk add --no-cache \
 
 COPY --from=postgis-builder /usr/local/lib/postgresql/ /usr/local/lib/postgresql/
 COPY --from=postgis-builder /usr/local/share/postgresql/extension/ /usr/local/share/postgresql/extension/
-COPY ./init/1.postgis.sh /docker-entrypoint-initdb.d/
+COPY ./scripts/init/1.postgis.sh /docker-entrypoint-initdb.d/
 
 #
 # --- Variant: PostGIS + TimescaleDB ---
 #
 
-FROM postgis as postgis-timescaledb
+FROM postgis AS postgis-timescaledb
 
 # hadolint ignore=DL3018
 RUN apk add --no-cache openssl
 
 COPY --from=timescaledb-builder /usr/local/lib/postgresql/ /usr/local/lib/postgresql/
 COPY --from=timescaledb-builder /usr/local/share/postgresql/extension/ /usr/local/share/postgresql/extension/
-COPY ./init/2.timescaledb.sh /docker-entrypoint-initdb.d/
+COPY ./scripts/init/2.timescaledb.sh /docker-entrypoint-initdb.d/
 
 RUN sed -r -i "s/[#]*\s*(shared_preload_libraries)\s*=\s*'(.*)'/\1 = 'timescaledb,\2'/;s/,'/'/" /usr/local/share/postgresql/postgresql.conf.sample;
