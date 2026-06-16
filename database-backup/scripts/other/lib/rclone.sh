@@ -41,6 +41,7 @@ rclone_copy_url() {
     --no-check-certificate \
     --retries 2 \
     --s3-chunk-size "$RCLONE_CHUNK_SIZE" \
+    --s3-no-check-bucket \
     --s3-upload-concurrency "$RCLONE_CONCURRENCY" \
     --stats 4s \
     --stats-one-line \
