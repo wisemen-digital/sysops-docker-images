@@ -1,0 +1,54 @@
+---
+name: Build & Publish Node Base
+
+on:  # yamllint disable-line rule:truthy
+  schedule:
+    - cron: "0 0 1,15 * *"  # Every 2 weeks
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/actions/**'
+      - '.github/workflows/build-and-publish-node-base.yml'
+      - 'common/**'
+      - 'node-base/**'
+      - 'tests/node-base/**'
+      - 'tests/run-tests.sh'
+  workflow_dispatch:
+
+jobs:
+  build-test-and-publish:
+    name: Build, test & publish
+    runs-on: ubuntu-latest
+    services:
+      registry:
+        image: registry:2
+        ports:
+          - 5000:5000
+    strategy:
+      matrix:
+        info:
+          - version: lts
+            alpine: '3.22'
+    env:
+      image: node-base
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Build & test
+        uses: ./.github/actions/build-and-test
+        with:
+          image: ${{ env.image }}
+          version: ${{ matrix.info.version }}
+          target: ${{ matrix.info.target }}
+          build-args: |
+            ALPINE_VERSION=${{ matrix.info.alpine }}
+      - name: Build & publish
+        uses: ./.github/actions/build-and-publish
+        with:
+          image: ${{ env.image }}
+          version: ${{ matrix.info.version }}
+          target: ${{ matrix.info.target }}
+          build-args: |
+            ALPINE_VERSION=${{ matrix.info.alpine }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
