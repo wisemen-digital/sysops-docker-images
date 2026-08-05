@@ -26,9 +26,7 @@ runs:
     - name: Install Goss
       shell: bash
       run: |
-          curl -sS -L https://github.com/goss-org/goss/releases/latest/download/goss-linux-amd64 -o /usr/local/bin/goss
-          curl -sS -L https://github.com/goss-org/goss/releases/latest/download/dgoss -o /usr/local/bin/dgoss
-          chmod +x /usr/local/bin/goss /usr/local/bin/dgoss
+        curl -fsSL https://goss.rocks/install | sh
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
       with:
