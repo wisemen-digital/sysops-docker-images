@@ -44,7 +44,7 @@ run_test() {
 
 dgoss_run() {
   # Remove some noise from dgoss output
-  dgoss run "$@" \
+  GOSS_SLEEP=0.5 dgoss run "$@" \
     > >(grep -v -e '^Total Duration:' -e '^[[:space:]]*$') \
     2> >(grep -v -e '^INFO: ' >&2)
 }
