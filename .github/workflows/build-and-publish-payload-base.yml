@@ -25,7 +25,7 @@ jobs:
     strategy:
       matrix:
         version:
-          - alpine: '3.22'
+          - alpine: '3.24'
             name: lts
     with:
       image: payload-base

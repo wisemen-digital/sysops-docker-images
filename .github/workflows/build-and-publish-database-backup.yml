@@ -23,9 +23,9 @@ jobs:
     strategy:
       matrix:
         version:
-          - alpine: '3.23'
+          - alpine: '3.24'
             name: latest
-            scw: '2.52'
+            scw: '2.62'
     with:
       image: database-backup
       version: ${{ matrix.version.name }}
