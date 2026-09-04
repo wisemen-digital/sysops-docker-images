@@ -7,5 +7,5 @@ port:
 process:
   nginx:
     running: true
-  node:
+  MainThread:  # Node process's binary name
     running: true
