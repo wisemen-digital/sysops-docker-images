@@ -16,13 +16,12 @@ ARG ALPINE_VERSION
 WORKDIR /usr/src/postgis
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
-# hadolint ignore=DL3018
+# hadolint ignore=DL3018,SC2086
 RUN apk add --no-cache \
+    ${DOCKER_PG_LLVM_DEPS} \
     autoconf \
     automake \
     build-base \
-    clang-dev \
-    clang19 \
     file \
     g++ \
     gcc \
@@ -31,8 +30,6 @@ RUN apk add --no-cache \
     json-c-dev \
     libtool \
     libxml2-dev \
-    llvm-dev \
-    llvm19 \
     make \
     perl \
     pkgconfig \
@@ -61,11 +58,10 @@ FROM base AS timescaledb-builder
 WORKDIR /usr/src/timescaledb
 SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
-# hadolint ignore=DL3018
+# hadolint ignore=DL3018,SC2086
 RUN apk add --no-cache \
+    ${DOCKER_PG_LLVM_DEPS} \
     build-base \
-    clang \
-    clang-dev \
     cmake \
     coreutils \
     dpkg \
@@ -73,7 +69,6 @@ RUN apk add --no-cache \
     icu-dev \
     gcc \
     libc-dev \
-    llvm-dev \
     openssl-dev \
     util-linux-dev
 
