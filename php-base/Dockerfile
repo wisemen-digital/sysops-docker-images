@@ -10,8 +10,8 @@ ARG PHP_VERSION="84"
 ARG DEFAULT_TZ="Europe/Brussels"
 
 # Install packages
-# hadolint ignore=DL3018
-RUN apk add --no-cache \
+# hadolint ignore=DL3018,SC2086
+RUN PKG_LIST="\
     php${PHP_VERSION}-cli \
     php${PHP_VERSION}-common \
     php${PHP_VERSION}-curl \
@@ -22,7 +22,6 @@ RUN apk add --no-cache \
     php${PHP_VERSION}-intl \
     php${PHP_VERSION}-json \
     php${PHP_VERSION}-mbstring \
-    php${PHP_VERSION}-opcache \
     php${PHP_VERSION}-openssl \
     php${PHP_VERSION}-pcntl \
     php${PHP_VERSION}-pdo \
@@ -38,7 +37,13 @@ RUN apk add --no-cache \
     php${PHP_VERSION}-xmlreader \
     php${PHP_VERSION}-xmlwriter \
     php${PHP_VERSION}-zip \
-    tzdata \
+    tzdata" \
+  && case "${PHP_VERSION}" in \
+       85) echo "Skipping opcache for PHP 8.5" ;; \
+       *) PKG_LIST="${PKG_LIST} php${PHP_VERSION}-opcache"; echo "Added opcache" ;; \
+     esac \
+  && echo "Packages: ${PKG_LIST}" \
+  && apk add --no-cache ${PKG_LIST} \
   && ln -sf /usr/bin/php${PHP_VERSION} /usr/bin/php \
   && cp /usr/share/zoneinfo/${DEFAULT_TZ} /etc/localtime \
   && echo "${DEFAULT_TZ}" > /etc/timezone \
