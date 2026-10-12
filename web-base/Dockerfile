@@ -18,9 +18,13 @@ RUN npm i @import-meta-env/cli && \
 
 FROM common:${ALPINE_VERSION}-nginx AS base
 
+# Trust HTTPS upstreams used by opt-in SSI head fragments.
+# hadolint ignore=DL3018
+RUN apk add --no-cache ca-certificates
+
 # Copy configuration files
 # - nginx
-COPY config/nginx/http.d/ /etc/nginx/http.d/
+COPY config/nginx/ /etc/nginx/
 # - s6-overlay
 COPY config/s6-overlay /etc/s6-overlay/s6-rc.d/
 # - init

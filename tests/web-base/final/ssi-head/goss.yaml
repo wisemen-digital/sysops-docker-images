@@ -1,0 +1,41 @@
+---
+http:
+  SSI preserves security and cache headers:
+    url: http://localhost:80/
+    request-headers:
+      Host: headers.example
+    status: 200
+    headers:
+      - 'Cache-Control: no-cache, must-revalidate'
+      - 'Content-Security-Policy-Report-Only: default-src ''self'';'
+      - 'X-Content-Type-Options: nosniff'
+      - 'X-Frame-Options: deny'
+    body:
+      - '<title>headers.example</title>'
+      - '"CLIENT_ID":"ssi-test-client"'
+  SSI works with gzip:
+    url: http://localhost:80/
+    request-headers:
+      Host: gzip.example
+      Accept-Encoding: gzip
+    status: 200
+    headers:
+      - 'Content-Encoding: gzip'
+  assets retain immutable caching:
+    url: http://localhost:80/style.css
+    status: 200
+    headers:
+      - 'Cache-Control: public, immutable, max-age=31536000, s-maxage=31536000'
+  fragment location is internal:
+    url: http://localhost:80/_ssi/head
+    status: 404
+  fallback location is internal:
+    url: http://localhost:80/_ssi/head-empty
+    status: 404
+command:
+  domain cache refresh and failure behavior:
+    exec: sh /tmp/check-ssi-head.sh
+    exit-status: 0
+    timeout: 60000
+    stdout:
+      - 'SSI head integration checks passed'

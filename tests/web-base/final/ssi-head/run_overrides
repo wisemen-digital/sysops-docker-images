@@ -1,0 +1,5 @@
+CUSTOM_ARGUMENTS=(
+  --mount "type=bind,ro,source=$PWD/extra-files/upstream.conf,target=/etc/nginx/http.d/ssi-test-upstream.conf"
+  --mount "type=bind,ro,source=$PWD/extra-files/check-ssi-head.sh,target=/tmp/check-ssi-head.sh"
+  --mount "type=bind,ro,source=$PWD/extra-files/env.example,target=/etc/import-meta-env/example"
+)
