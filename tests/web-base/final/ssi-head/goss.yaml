@@ -3,7 +3,7 @@ http:
   SSI preserves security and cache headers:
     url: http://localhost:80/
     request-headers:
-      Host: headers.example
+      - 'Host: headers.example'
     status: 200
     headers:
       - 'Cache-Control: no-cache, must-revalidate'
@@ -16,8 +16,8 @@ http:
   SSI works with gzip:
     url: http://localhost:80/
     request-headers:
-      Host: gzip.example
-      Accept-Encoding: gzip
+      - 'Host: gzip.example'
+      - 'Accept-Encoding: gzip'
     status: 200
     headers:
       - 'Content-Encoding: gzip'
@@ -34,8 +34,6 @@ http:
     status: 404
 command:
   domain cache refresh and failure behavior:
-    exec: sh /tmp/check-ssi-head.sh
+    exec: node --test /tests/ssi-head-config.test.mjs /tests/check-ssi-head.test.mjs
     exit-status: 0
     timeout: 60000
-    stdout:
-      - 'SSI head integration checks passed'

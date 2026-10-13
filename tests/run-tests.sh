@@ -24,6 +24,7 @@ run_test() {
     ARGUMENTS+=(--mount "type=bind,source=$file,target=/app/www/${file#$tempdir/}")
   done
   
+  TEST_IMAGE=$IMAGE_NAME
   CUSTOM_ARGUMENTS=()
   CUSTOM_CMD=
   if [ -f run_overrides ]; then
@@ -34,7 +35,7 @@ run_test() {
   dgoss_run \
     "${ARGUMENTS[@]}" \
     "${CUSTOM_ARGUMENTS[@]}" \
-    $IMAGE_NAME \
+    "$TEST_IMAGE" \
     $CUSTOM_CMD
   set -u
 
