@@ -121,6 +121,11 @@ location = /_ssi/head {
 
 location = /_ssi/head-empty {
   internal;
+  # Preserve nginx's own rejection of direct requests to the internal location.
+  # Only requests that contacted an upstream receive an empty SSI fallback.
+  if (\$upstream_status = "") {
+    return 404;
+  }
   return 204;
 }
 EOF

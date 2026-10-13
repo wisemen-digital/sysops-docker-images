@@ -48,6 +48,7 @@ test('defaults isolate domains, strip credentials, and allow only successful cac
   const location = f.read('site-mods-enabled.d/generated-ssi-head.conf');
   assert.ok(location.includes(`proxy_cache_key "${url}|$host";`));
   assert.doesNotMatch(location, /\$request_uri/);
+  assert.ok(location.includes('if ($upstream_status = "") {\n    return 404;'));
   for (const directive of ['proxy_pass_request_headers off;', 'proxy_set_header X-Forwarded-Host $host;',
     'proxy_ssl_verify on;', 'proxy_cache_valid 200 1h;', 'proxy_cache_background_update on;',
     'proxy_cache_use_stale updating;', 'proxy_no_cache $ssi_head_do_not_cache;']) {
