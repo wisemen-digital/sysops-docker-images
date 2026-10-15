@@ -71,17 +71,3 @@ Reporting:
 |-----------------|---------|-------------|---------|
 | NGINX_ROBOTS_TAG | Every run | `X-Robots-Tag` value | `none` |
 | NGINX_ROBOTS_TXT | Every run | Content of `robots.txt`. Note that setting to `disable` removes the rule completely. | `Disallow: /` |
-
-### Server-side head fragments (web-base only)
-
-| Environment Key | Applied | Description | Default |
-|-----------------|---------|-------------|---------|
-| NGINX_SSI_HEAD_URL | Every run | Literal HTTP(S) URL returning public, domain-specific HTML head elements. Unset disables the feature. | |
-| NGINX_SSI_HEAD_CACHE_TTL | Every run | Freshness duration for successful fragments without upstream freshness headers. | `1h` |
-| NGINX_SSI_HEAD_CACHE_INACTIVE | Every run | Remove cache entries not accessed for this duration. | `2h` |
-| NGINX_SSI_HEAD_CACHE_MAX_SIZE | Every run | Maximum disk cache size per container. | `100m` |
-
-Durations are positive integers, optionally followed by `s`, `m`, `h`, `d`, or `w`.
-Sizes are positive integers, optionally followed by `k`, `m`, or `g`.
-See [web-base's SSI guide](web-base/README.md#server-side-head-fragments) for the
-application include, upstream contract, and refresh behavior.
