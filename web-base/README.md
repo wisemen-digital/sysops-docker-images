@@ -49,8 +49,10 @@ a query configured in the upstream URL is retained.
 
 Fragments are cached separately per endpoint/domain in each container. Expired
 entries are served while a traffic-triggered background refresh runs. Upstream
-freshness headers override the configured TTL. Redirects and errors produce an
-empty fragment; use an SSI `stub` for application-defined fallback content.
+freshness headers override the configured TTL. Inactivity controls eviction
+after the last access, not a hard maximum age or an immediate cache purge.
+Common upstream redirects and errors produce an empty fragment; use an SSI
+`stub` for application-defined fallback content.
 
 See the [nginx SSI documentation](https://nginx.org/en/docs/http/ngx_http_ssi_module.html)
 for include and fallback syntax.

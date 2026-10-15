@@ -74,10 +74,6 @@ map \$upstream_status \$ssi_head_do_not_cache {
 }
 EOF
 
-# Normalize upstream redirects/errors to an empty fragment for SSI stubs.
-# Nginx reserves 499 for closed client connections; error_page rejects it.
-readonly ERROR_CODES=$(seq 300 599 | sed '/^499$/d' | tr '\n' ' ')
-
 cat > "$LOCATION_CONFIG" <<EOF
 location = /_ssi/head {
   internal;
@@ -113,7 +109,10 @@ location = /_ssi/head {
   proxy_cache_use_stale updating;
 
   proxy_intercept_errors on;
-  error_page $ERROR_CODES =204 /_ssi/head-empty;
+  # Common upstream redirects and failures use the application SSI fallback.
+  error_page 301 302 303 307 308
+             400 401 403 404 429
+             500 502 503 504 =204 /_ssi/head-empty;
 }
 
 location = /_ssi/head-empty {
