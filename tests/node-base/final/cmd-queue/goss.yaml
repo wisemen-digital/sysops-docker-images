@@ -1,0 +1,7 @@
+---
+command:
+  queue worker is running:
+    exec: 'ps -a'
+    exit-status: 0
+    stdout:
+      - 'node ./dist/src/entrypoints/worker.js --queue=system'
