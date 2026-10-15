@@ -33,8 +33,8 @@ Use an internal HTTP endpoint; TLS terminates at the Kubernetes ingress/gateway.
 | NGINX_SSI_HEAD_CACHE_INACTIVE | Every run | Remove cache entries not accessed for this duration. | `2h` |
 | NGINX_SSI_HEAD_CACHE_MAX_SIZE | Every run | Maximum disk cache size per container. | `100m` |
 
-Durations are positive integers with an optional `s`, `m`, `h`, `d`, or `w` suffix;
-sizes accept an optional `k`, `m`, or `g` suffix.
+Cache settings use nginx duration and size syntax (for example `1m`, `1h`,
+and `100m`). nginx validates these values when it starts.
 
 Include the fragment inside `<head>` and preserve SSI comments in the HTML build:
 

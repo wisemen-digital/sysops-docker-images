@@ -29,12 +29,6 @@ if [ -n "$HEAD_URL" ]; then
   matches "$HEAD_URL" \
     '^http://([A-Za-z0-9._-]+|\[[0-9A-Fa-f:]+\])(:[0-9]+)?(/[-A-Za-z0-9._~:/?&=%,+!*()@]*)?$' \
     || fail 'NGINX_SSI_HEAD_URL must be a literal HTTP URL without credentials or a fragment'
-  matches "$CACHE_TTL" '^[1-9][0-9]*[smhdw]?$' \
-    || fail 'NGINX_SSI_HEAD_CACHE_TTL must be a positive duration (for example 1h)'
-  matches "$CACHE_INACTIVE" '^[1-9][0-9]*[smhdw]?$' \
-    || fail 'NGINX_SSI_HEAD_CACHE_INACTIVE must be a positive duration (for example 2h)'
-  matches "$CACHE_MAX_SIZE" '^[1-9][0-9]*[kKmMgG]?$' \
-    || fail 'NGINX_SSI_HEAD_CACHE_MAX_SIZE must be a positive size (for example 100m)'
 
   # A URL without a path denotes the upstream root, not the internal SSI URI.
   case "${HEAD_URL#*://}" in
