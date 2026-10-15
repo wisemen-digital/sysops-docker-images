@@ -1,6 +1,6 @@
 ---
 http:
-  SSI preserves security and cache headers:
+  SSI preserves security and cache headers: &ssi-response
     url: http://localhost:80/
     request-headers:
       - 'Host: headers.example'
@@ -32,8 +32,23 @@ http:
   fallback location is internal:
     url: http://localhost:80/_ssi/head-empty
     status: 404
-command:
-  domain cache refresh and failure behavior:
-    exec: node --test /tests/ssi-head-config.test.mjs /tests/check-ssi-head.test.mjs
-    exit-status: 0
-    timeout: 60000
+  SSI includes the head for index.html:
+    <<: *ssi-response
+    url: http://localhost:80/index.html
+  SSI includes the head for deep links:
+    <<: *ssi-response
+    url: http://localhost:80/example/page
+  SSI resolves the requested domain:
+    url: http://localhost:80/
+    request-headers:
+      - 'Host: another.example'
+    status: 200
+    body:
+      - '<title>another.example</title>'
+  SSI uses the application fallback when the upstream fails:
+    url: http://localhost:80/
+    request-headers:
+      - 'Host: unavailable.example'
+    status: 200
+    body:
+      - '<title>Fallback website</title>'
