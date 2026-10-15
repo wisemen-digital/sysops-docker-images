@@ -4,7 +4,8 @@ set -eu
 
 readonly HTML_CONFIG=/etc/nginx/snippets/ssi-head-html.conf
 readonly CACHE_CONFIG=/etc/nginx/http.d/generated-ssi-head-cache.conf
-readonly LOCATION_CONFIG=/etc/nginx/site-mods-enabled.d/generated-ssi-head.conf
+readonly UPSTREAM_CONFIG=/etc/nginx/snippets/proxy/generated-ssi-head-upstream.conf
+readonly LOCATION_CONFIG=/etc/nginx/site-mods-enabled.d/ssi-head.conf
 readonly CACHE_DIR=/tmp/ssi-head-cache
 HEAD_URL=${NGINX_SSI_HEAD_URL:-}
 readonly CACHE_TTL=${NGINX_SSI_HEAD_CACHE_TTL:-1h}
@@ -48,12 +49,7 @@ if [ -n "$HEAD_URL" ]; then
   mkdir -p "$CACHE_DIR"
   chown nobody:nogroup "$CACHE_DIR"
 
-  cat > "$HTML_CONFIG" <<'EOF'
-ssi on;
-ssi_last_modified off;
-etag off;
-if_modified_since off;
-EOF
+  echo 'include /etc/nginx/snippets/ssi-head-html-enabled.conf;' > "$HTML_CONFIG"
 
   cat > "$CACHE_CONFIG" <<EOF
 include /etc/nginx/snippets/vars/ssi-head.conf;
@@ -62,61 +58,18 @@ proxy_cache_path $CACHE_DIR levels=1:2 keys_zone=ssi_head:1m
     max_size=$CACHE_MAX_SIZE inactive=$CACHE_INACTIVE use_temp_path=off;
 EOF
 
-  cat > "$LOCATION_CONFIG" <<EOF
-location = /_ssi/head {
-  internal;
-  ssi off;
-
-  proxy_pass "$HEAD_URL";
-  proxy_method GET;
-  proxy_pass_request_body off;
-  proxy_pass_request_headers off;
-  proxy_set_header Host \$proxy_host;
-  proxy_set_header X-Forwarded-Host \$host;
-  proxy_set_header Accept text/html;
-  proxy_set_header Accept-Encoding "";
-  proxy_set_header Connection "";
-  proxy_set_header Content-Length "";
-  proxy_hide_header Set-Cookie;
-  proxy_ignore_headers X-Accel-Redirect;
-
-  proxy_http_version 1.1;
-  proxy_buffering on;
-  proxy_connect_timeout 1s;
-  proxy_send_timeout 2s;
-  proxy_read_timeout 2s;
-  proxy_next_upstream off;
-  proxy_redirect off;
-
-  proxy_cache ssi_head;
-  proxy_cache_key "$HEAD_URL|\$host";
-  proxy_cache_valid 200 $CACHE_TTL;
-  proxy_no_cache \$ssi_head_do_not_cache;
-  proxy_cache_lock on;
-  proxy_cache_background_update on;
-  proxy_cache_use_stale updating;
-
-  proxy_intercept_errors on;
-  # Common upstream redirects and failures use the application SSI fallback.
-  error_page 301 302 303 307 308
-             400 401 403 404 429
-             500 502 503 504 =204 /_ssi/head-empty;
-}
-
-location = /_ssi/head-empty {
-  internal;
-  # Preserve nginx's own rejection of direct requests to the internal location.
-  # Only requests that contacted an upstream receive an empty SSI fallback.
-  if (\$upstream_status = "") {
-    return 404;
-  }
-  return 204;
-}
+  cat > "$UPSTREAM_CONFIG" <<EOF
+proxy_pass "$HEAD_URL";
+proxy_cache_key "$HEAD_URL|\$host";
+proxy_cache_valid 200 $CACHE_TTL;
 EOF
+
+  ln -sf ../site-mods-available.d/ssi-head.conf "$LOCATION_CONFIG"
 
   echo 'Nginx: enabled domain-aware SSI head caching'
 else
   echo '# SSI head disabled' > "$HTML_CONFIG"
   echo '# SSI head disabled' > "$CACHE_CONFIG"
-  echo '# SSI head disabled' > "$LOCATION_CONFIG"
+  echo '# SSI head disabled' > "$UPSTREAM_CONFIG"
+  rm -f "$LOCATION_CONFIG"
 fi
