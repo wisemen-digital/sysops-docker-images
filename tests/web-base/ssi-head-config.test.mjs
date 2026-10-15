@@ -43,14 +43,15 @@ test('opting out removes previously generated configuration', (t) => {
 
 test('defaults isolate domains, strip credentials, and allow only successful cache fills', (t) => {
   const f = fixture(t);
-  const url = 'https://api.example.test/head?source=web&language=en';
+  const url = 'http://api.example.test/head?source=web&language=en';
   assert.equal(f.configure({ NGINX_SSI_HEAD_URL: url }).status, 0);
   const location = f.read('site-mods-enabled.d/generated-ssi-head.conf');
   assert.ok(location.includes(`proxy_cache_key "${url}|$host";`));
   assert.doesNotMatch(location, /\$request_uri/);
+  assert.doesNotMatch(location, /proxy_ssl_/);
   assert.ok(location.includes('if ($upstream_status = "") {\n    return 404;'));
   for (const directive of ['proxy_pass_request_headers off;', 'proxy_set_header X-Forwarded-Host $host;',
-    'proxy_ssl_verify on;', 'proxy_cache_valid 200 1h;', 'proxy_cache_background_update on;',
+    'proxy_cache_valid 200 1h;', 'proxy_cache_background_update on;',
     'proxy_cache_use_stale updating;', 'proxy_no_cache $ssi_head_do_not_cache;']) {
     assert.ok(location.includes(directive), directive);
   }
@@ -60,8 +61,8 @@ test('defaults isolate domains, strip credentials, and allow only successful cac
 
 test('bare endpoint URLs target the upstream root', (t) => {
   const f = fixture(t);
-  assert.equal(f.configure({ NGINX_SSI_HEAD_URL: 'https://127.0.0.1:8081' }).status, 0);
-  assert.match(f.read('site-mods-enabled.d/generated-ssi-head.conf'), /proxy_pass "https:\/\/127\.0\.0\.1:8081\/";/);
+  assert.equal(f.configure({ NGINX_SSI_HEAD_URL: 'http://127.0.0.1:8081' }).status, 0);
+  assert.match(f.read('site-mods-enabled.d/generated-ssi-head.conf'), /proxy_pass "http:\/\/127\.0\.0\.1:8081\/";/);
 });
 
 test('cache limits are configurable', (t) => {
@@ -75,7 +76,7 @@ test('cache limits are configurable', (t) => {
 test('invalid configuration is rejected before writing files', (t) => {
   const f = fixture(t);
   const invalid = {
-    NGINX_SSI_HEAD_URL: ['ftp://api.example/head', 'http://user:password@api.example/head',
+    NGINX_SSI_HEAD_URL: ['https://api.example/head', 'ftp://api.example/head', 'http://user:password@api.example/head',
       'http://api.example/head#fragment', 'http://api.example/$host', 'http://api.example/"; return 200; #',
       'http://api.example/head\nserver { listen 1234; }'],
     NGINX_SSI_HEAD_CACHE_TTL: ['0', '-1h', '1h; return 200;', '1h\n1d'],

@@ -24,10 +24,11 @@ Check the [general readme](../README.md) for configuring common settings.
 
 Set `NGINX_SSI_HEAD_URL` to enable domain-specific head fragments in the HTML
 entrypoint and SPA fallback routes. Leave it unset to retain static HTML serving.
+Use an internal HTTP endpoint; TLS terminates at the Kubernetes ingress/gateway.
 
 | Environment Key | Applied | Description | Default |
 |-----------------|---------|-------------|---------|
-| NGINX_SSI_HEAD_URL | Every run | Literal HTTP(S) URL returning public HTML head elements. | |
+| NGINX_SSI_HEAD_URL | Every run | Literal HTTP URL returning public HTML head elements. | |
 | NGINX_SSI_HEAD_CACHE_TTL | Every run | Freshness duration without upstream freshness headers. | `1h` |
 | NGINX_SSI_HEAD_CACHE_INACTIVE | Every run | Remove cache entries not accessed for this duration. | `2h` |
 | NGINX_SSI_HEAD_CACHE_MAX_SIZE | Every run | Maximum disk cache size per container. | `100m` |

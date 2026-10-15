@@ -18,10 +18,6 @@ RUN npm i @import-meta-env/cli && \
 
 FROM common:${ALPINE_VERSION}-nginx AS base
 
-# Trust HTTPS upstreams used by opt-in SSI head fragments.
-# hadolint ignore=DL3018
-RUN apk add --no-cache ca-certificates
-
 # Copy configuration files
 # - nginx
 COPY config/nginx/ /etc/nginx/

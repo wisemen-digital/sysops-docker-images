@@ -26,8 +26,8 @@ if [ -n "$HEAD_URL" ]; then
   # Reject nginx variables, credentials, fragments and configuration delimiters.
   # Percent-encode URI characters outside this deliberately small allowlist.
   matches "$HEAD_URL" \
-    '^https?://([A-Za-z0-9._-]+|\[[0-9A-Fa-f:]+\])(:[0-9]+)?(/[-A-Za-z0-9._~:/?&=%,+!*()@]*)?$' \
-    || fail 'NGINX_SSI_HEAD_URL must be a literal HTTP(S) URL without credentials or a fragment'
+    '^http://([A-Za-z0-9._-]+|\[[0-9A-Fa-f:]+\])(:[0-9]+)?(/[-A-Za-z0-9._~:/?&=%,+!*()@]*)?$' \
+    || fail 'NGINX_SSI_HEAD_URL must be a literal HTTP URL without credentials or a fragment'
   matches "$CACHE_TTL" '^[1-9][0-9]*[smhdw]?$' \
     || fail 'NGINX_SSI_HEAD_CACHE_TTL must be a positive duration (for example 1h)'
   matches "$CACHE_INACTIVE" '^[1-9][0-9]*[smhdw]?$' \
@@ -103,9 +103,6 @@ location = /_ssi/head {
   proxy_read_timeout 2s;
   proxy_next_upstream off;
   proxy_redirect off;
-  proxy_ssl_server_name on;
-  proxy_ssl_verify on;
-  proxy_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
 
   proxy_cache ssi_head;
   proxy_cache_key "$HEAD_URL|\$host";
