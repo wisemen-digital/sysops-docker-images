@@ -44,32 +44,25 @@ fi
 
 readonly HEAD_URL
 
-# Reset generated configuration on every startup, including when opting out.
-echo '# SSI head disabled' > "$HTML_CONFIG"
-rm -f "$CACHE_CONFIG" "$LOCATION_CONFIG"
+if [ -n "$HEAD_URL" ]; then
+  mkdir -p "$CACHE_DIR"
+  chown nobody:nogroup "$CACHE_DIR"
 
-if [ -z "$HEAD_URL" ]; then
-  exit 0
-fi
-
-mkdir -p "$CACHE_DIR"
-chown nobody:nogroup "$CACHE_DIR"
-
-cat > "$HTML_CONFIG" <<'EOF'
+  cat > "$HTML_CONFIG" <<'EOF'
 ssi on;
 ssi_last_modified off;
 etag off;
 if_modified_since off;
 EOF
 
-cat > "$CACHE_CONFIG" <<EOF
+  cat > "$CACHE_CONFIG" <<EOF
 include /etc/nginx/snippets/vars/ssi-head.conf;
 
 proxy_cache_path $CACHE_DIR levels=1:2 keys_zone=ssi_head:1m
     max_size=$CACHE_MAX_SIZE inactive=$CACHE_INACTIVE use_temp_path=off;
 EOF
 
-cat > "$LOCATION_CONFIG" <<EOF
+  cat > "$LOCATION_CONFIG" <<EOF
 location = /_ssi/head {
   internal;
   ssi off;
@@ -121,4 +114,9 @@ location = /_ssi/head-empty {
 }
 EOF
 
-echo 'Nginx: enabled domain-aware SSI head caching'
+  echo 'Nginx: enabled domain-aware SSI head caching'
+else
+  echo '# SSI head disabled' > "$HTML_CONFIG"
+  echo '# SSI head disabled' > "$CACHE_CONFIG"
+  echo '# SSI head disabled' > "$LOCATION_CONFIG"
+fi
