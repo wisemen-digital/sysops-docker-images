@@ -63,14 +63,10 @@ if_modified_since off;
 EOF
 
 cat > "$CACHE_CONFIG" <<EOF
+include /etc/nginx/snippets/vars/ssi-head.conf;
+
 proxy_cache_path $CACHE_DIR levels=1:2 keys_zone=ssi_head:1m
     max_size=$CACHE_MAX_SIZE inactive=$CACHE_INACTIVE use_temp_path=off;
-
-# Only successful fragments may be cached, even when an upstream sends a TTL.
-map \$upstream_status \$ssi_head_do_not_cache {
-  default 1;
-  200 0;
-}
 EOF
 
 cat > "$LOCATION_CONFIG" <<EOF
