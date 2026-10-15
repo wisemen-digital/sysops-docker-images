@@ -45,7 +45,6 @@ fi
 readonly HEAD_URL
 
 # Reset generated configuration on every startup, including when opting out.
-mkdir -p /etc/nginx/snippets /etc/nginx/http.d /etc/nginx/site-mods-enabled.d
 echo '# SSI head disabled' > "$HTML_CONFIG"
 rm -f "$CACHE_CONFIG" "$LOCATION_CONFIG"
 
