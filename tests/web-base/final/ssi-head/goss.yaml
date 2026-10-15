@@ -1,0 +1,54 @@
+---
+http:
+  SSI preserves security and cache headers: &ssi-response
+    url: http://localhost:80/
+    request-headers:
+      - 'Host: headers.example'
+    status: 200
+    headers:
+      - 'Cache-Control: no-cache, must-revalidate'
+      - 'Content-Security-Policy-Report-Only: default-src ''self'';'
+      - 'X-Content-Type-Options: nosniff'
+      - 'X-Frame-Options: deny'
+    body:
+      - '<title>headers.example</title>'
+      - '"CLIENT_ID":"ssi-test-client"'
+  SSI works with gzip:
+    url: http://localhost:80/
+    request-headers:
+      - 'Host: gzip.example'
+      - 'Accept-Encoding: gzip'
+    status: 200
+    headers:
+      - 'Content-Encoding: gzip'
+  assets retain immutable caching:
+    url: http://localhost:80/style.css
+    status: 200
+    headers:
+      - 'Cache-Control: public, immutable, max-age=31536000, s-maxage=31536000'
+  fragment location is internal:
+    url: http://localhost:80/_ssi/head
+    status: 404
+  fallback location is internal:
+    url: http://localhost:80/_ssi/head-empty
+    status: 404
+  SSI includes the head for index.html:
+    <<: *ssi-response
+    url: http://localhost:80/index.html
+  SSI includes the head for deep links:
+    <<: *ssi-response
+    url: http://localhost:80/example/page
+  SSI resolves the requested domain:
+    url: http://localhost:80/
+    request-headers:
+      - 'Host: another.example'
+    status: 200
+    body:
+      - '<title>another.example</title>'
+  SSI uses the application fallback when the upstream fails:
+    url: http://localhost:80/
+    request-headers:
+      - 'Host: unavailable.example'
+    status: 200
+    body:
+      - '<title>Fallback website</title>'

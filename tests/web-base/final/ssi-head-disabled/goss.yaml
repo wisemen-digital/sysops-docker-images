@@ -1,0 +1,10 @@
+---
+http:
+  unconfigured apps retain static HTML:
+    url: http://localhost:80/
+    status: 200
+    headers:
+      - 'Cache-Control: no-cache, must-revalidate'
+    body:
+      - '<!--# include virtual="/_ssi/head" wait="yes" -->'
+      - 'Static app'

@@ -1,0 +1,7 @@
+TEST_IMAGE="${IMAGE_NAME%:*}-ssi-head-test:${IMAGE_NAME##*:}"
+docker build --build-arg "BASE_IMAGE=$IMAGE_NAME" -t "$TEST_IMAGE" \
+  "$PWD/extra-files"
+
+CUSTOM_ARGUMENTS=(
+  --mount "type=bind,ro,source=$PWD/extra-files/env.example,target=/etc/import-meta-env/example"
+)
