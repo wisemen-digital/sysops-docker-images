@@ -1,1 +1,1 @@
-*/30 * * * * /usr/local/bin/php -d memory_limit=-1 -d display_errors=0 /var/www/html/console core:archive --verbose --no-interaction
+*/30 * * * * PHP_MEMORY_LIMIT=-1 /usr/local/bin/php -d display_errors=0 /var/www/html/console core:archive --verbose --no-interaction
