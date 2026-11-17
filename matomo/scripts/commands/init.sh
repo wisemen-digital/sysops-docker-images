@@ -124,7 +124,7 @@ matomo_tweak_options() {
 # Will always be run, to reflect changes to the ENV
 matomo_update_config() {
   # Database settings
-  ./console config:set \
+  ./console config:set --quiet \
     "database.host=\"$MATOMO_DATABASE_HOST:$MATOMO_DATABASE_PORT_NUMBER\"" \
     "database.username=\"$MATOMO_DATABASE_USER\"" \
     "database.password=\"$MATOMO_DATABASE_PASSWORD\"" \
@@ -144,7 +144,7 @@ matomo_update_config() {
     'General.proxy_host_headers[]="HTTP_X_FORWARDED_HOST"'
 
   # Email settings
-  ./console config:set \
+  ./console config:set --quiet \
     "General.noreply_email_address=\"$MATOMO_NOREPLY_ADDRESS\"" \
     "General.noreply_email_name=\"$MATOMO_NOREPLY_NAME\"" \
     'mail.transport="smtp"' \
