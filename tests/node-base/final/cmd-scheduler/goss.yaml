@@ -1,0 +1,7 @@
+---
+command:
+  scheduler worker is running:
+    exec: 'ps -a'
+    exit-status: 0
+    stdout:
+      - 'node ./dist/src/entrypoints/cronjob.js check-record-date-actions'
