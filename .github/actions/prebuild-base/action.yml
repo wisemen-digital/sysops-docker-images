@@ -12,6 +12,10 @@ inputs:
   platforms:
     description: "Platforms (architectures) to build for"
     required: false
+  no-cache:
+    description: "Bypass the build cache (used for scheduled rebuilds, to pick up upstream package security fixes)"
+    required: false
+    default: "false"
 
 outputs:
   build-context:
@@ -53,6 +57,7 @@ runs:
         tags: localhost:5000/${{ steps.parse.outputs.base-image }}
         target: ${{ steps.parse.outputs.base-target }}
         build-args: ${{ inputs.build-args }}
+        no-cache: ${{ inputs.no-cache }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
       env:

@@ -22,6 +22,10 @@ inputs:
   github-token:
     description: 'GitHub token'
     required: true
+  no-cache:
+    description: "Bypass the build cache (used for scheduled rebuilds, to pick up upstream package security fixes)"
+    required: false
+    default: "false"
 
 runs:
   using: "composite"
@@ -45,6 +49,7 @@ runs:
         image: ${{ inputs.image }}
         build-args: ${{ inputs.build-args }}
         platforms: linux/amd64,linux/arm64
+        no-cache: ${{ inputs.no-cache }}
     - name: Build & push (multi-arch)
       uses: docker/build-push-action@v6
       with:
@@ -56,5 +61,6 @@ runs:
         target: ${{ inputs.target }}
         build-args: ${{ inputs.build-args }}
         build-contexts: ${{ steps.build-base.outputs.build-context }}
+        no-cache: ${{ inputs.no-cache }}
         cache-from: type=gha
         cache-to: type=gha,mode=max
