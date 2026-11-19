@@ -57,6 +57,7 @@ jobs:
           target: ${{ inputs.target }}
           build-args: ${{ inputs.build-args }}
           context: ${{ inputs.context }}
+          no-cache: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
 
   build-and-publish:
     needs: build-and-test
@@ -82,3 +83,4 @@ jobs:
           build-args: ${{ inputs.build-args }}
           context: ${{ inputs.context }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          no-cache: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}

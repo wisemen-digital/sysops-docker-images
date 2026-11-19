@@ -5,9 +5,10 @@
 ARG ALPINE_VERSION="3.22"
 FROM alpine:${ALPINE_VERSION} AS base
 
-# Install packages
+# Update inherited packages and install the init system.
 # hadolint ignore=DL3018
-RUN apk add --no-cache \
+RUN apk upgrade --no-cache \
+  && apk add --no-cache \
     s6-overlay
 
 # Copy files

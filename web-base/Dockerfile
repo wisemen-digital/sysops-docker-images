@@ -2,7 +2,7 @@
 # --- Stage 1: Build ---
 #
 
-ARG ALPINE_VERSION="3.22"
+ARG ALPINE_VERSION="3.24"
 FROM node:lts AS build
 
 # Build import env tool
