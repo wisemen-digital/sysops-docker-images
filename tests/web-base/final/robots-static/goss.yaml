@@ -1,0 +1,15 @@
+---
+http:
+  static robots short cache:
+    body:
+      - 'User-agent: facebookexternalhit'
+      - 'Disallow: /'
+    headers:
+      - 'Cache-Control: public, max-age=300, s-maxage=300'
+      - '!immutable'
+      - '!31536000'
+      - 'Content-Type: text/plain'
+      - 'Access-Control-Allow-Origin: *'
+      - 'X-Content-Type-Options: nosniff'
+    status: 200
+    url: http://localhost:80/robots.txt
